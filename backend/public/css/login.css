@@ -1,0 +1,146 @@
+/*The @import rule is used to import an external CSS file containing font styles from the Google Fonts API "Poppins" family, specifying styles, weights and loading optimization.*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #181a1b;
+    font-family: 'Poppins', sans-serif;
+    color: #cfd1d0;
+}
+
+.login-container {
+    width: 400px;
+    padding: 40px;
+    background-color: #1d2021;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.login-title {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #1d7b92;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.subtitle {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #cfd1d0;
+    opacity: 0.7;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #cfd1d0;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #2a2e2f;
+    border-radius: 6px;
+    background-color: #242728;
+    color: #cfd1d0;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1d7b92;
+}
+
+.password-input {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #6c757d;
+}
+
+.toggle-password:hover {
+    color: #1d7b92;
+}
+
+.error-message {
+    background-color: rgba(220, 38, 38, 0.1);
+    color: #ef4444;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #1d7b92;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #165f70;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #1d7b92;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 480px) {
+    .login-container {
+        width: 90%;
+        padding: 20px;
+        margin: 20px;
+    }
+}
+
+/* Defining the font of the texts */
+h2, p {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Changes color when hovering the mouse over the link */
+a:hover {
+    color: #1445e8;
+}

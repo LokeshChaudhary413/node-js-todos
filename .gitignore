@@ -1,0 +1,7 @@
+/backend/node_modules
+node_modules
+backend/.env
+mongo-data
+/package-lock.json
+/package.json
+uploads

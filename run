@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Stop and remove containers
+docker-compose down
+
+# Rebuild, and run the containers
+docker-compose up --build -d
+
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Stop and remove containers
+docker logs -f todo-backend
+
+
+
+
