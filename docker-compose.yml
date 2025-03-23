@@ -12,7 +12,7 @@ services:
       - /app/backend/node_modules
     ports:
       - "5000:5000"
-    command: bash -c "npm init -y && npm install && npm update && npm start"
+    command: bash -c "npm install && npm start"
     depends_on:
       - mongo
     environment:

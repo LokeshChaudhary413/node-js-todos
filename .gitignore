@@ -5,3 +5,5 @@ mongo-data
 /package-lock.json
 /package.json
 uploads
+*.log
+run-new
