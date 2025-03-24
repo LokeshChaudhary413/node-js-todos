@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, 'Address is required'],
+    required: [false, 'Address is required'],
   },
   dob: {
     type: String,
@@ -52,20 +52,20 @@ const userSchema = new mongoose.Schema({
   },
   city: {
     type: String,
-    required: [true, 'City is required'],
+    required: [false, 'City is required'],
   },
   zipcode: {
     type: String,
-    required: [true, 'Zip code is required'],
+    required: [false, 'Zip code is required'],
     match: [/^\d{5}(-\d{4})?$/, 'Please provide a valid zip code'],
   },
   state: {
     type: String,
-    required: [true, 'State is required'],
+    required: [false, 'State is required'],
   },
   country: {
     type: String,
-    required: [true, 'Country is required'],
+    required: [false, 'Country is required'],
   },
 });
 
