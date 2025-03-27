@@ -1,12 +1,12 @@
 {
-  "name": "todo-list-nodejs",
+  "name": "node-js-todos",
   "version": "1.0.0",
   "description": "TO-DO List using Nodejs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
-    "prod": "pm2 start index.js"
+    "prod": "pm2 monitor"
   },
   "repository": {
     "type": "git",
@@ -15,9 +15,9 @@
   "author": "Ankit",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Ankit6098/TO-DO-List-NodeJs/issues"
+    "url": "https://github.com/LokeshChaudhary413/node-js-todos/issues"
   },
-  "homepage": "https://github.com/Ankit6098/TO-DO-List-NodeJs#readme",
+  "homepage": "https://github.com/LokeshChaudhary413/node-js-todos#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
@@ -33,6 +33,5 @@
     "nodemon": "^3.1.9",
     "pm2": "^5.4.3"
   },
-  "keywords": [],
-  "devDependencies": {}
+  "keywords": []
 }
