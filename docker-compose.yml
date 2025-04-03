@@ -5,18 +5,28 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: todo-backend
-    restart: always
+    restart: on-failure
     working_dir: /app/backend
     volumes:
       - ./backend:/app/backend
       - /app/backend/node_modules
     ports:
       - "5000:5000"
-    command: bash -c "npm install && npm start"
+    command: >
+      bash -c "
+        npm install && 
+        if [ \"$$NODE_ENV\" = \"production\" ]; then 
+          npm run prod; 
+        else 
+          npm start; 
+        fi
+      "
     depends_on:
       - mongo
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/mernapp
+    env_file:
+      - ./backend/.env
+    # environment:
+    #   - MONGO_URI=mongodb://mongo:27017/mernapp
   mongo:
     image: mongo:5.0
     container_name: mongo

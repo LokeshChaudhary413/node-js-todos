@@ -1,34 +1,9 @@
 #!/bin/bash
 
-# Load environment variables from deploy.env file
-if [ -f ./backend/.env ]; then
-    set -a
-    source ./backend/.env
-    set +a
-fi
-
-# Log file for deployment
-LOG_FILE="deployment.log"
-echo "Deployment started at $(date)" > $LOG_FILE
-
 # Stop and remove containers
-echo "Stopping and removing containers..." | tee -a $LOG_FILE
-docker-compose down >> $LOG_FILE 2>&1
+docker-compose down
 
-# Install dependencies and run the appropriate command
-if [ "$NODE_ENV" == "production" ]; then
-    echo "Running in production mode..." | tee -a $LOG_FILE
-    # docker-compose down >> $LOG_FILE 2>&1
-    docker-compose down
-    docker-compose up -d --build
-    docker-compose exec backend npm install
-    docker-compose exec backend npm run prod >> $LOG_FILE 2>&1
-else
-    echo "Running in development mode..." | tee -a $LOG_FILE
-    docker-compose down
-    docker-compose up -d --build
-    docker-compose exec backend npm install
-    docker-compose exec backend npm start >> $LOG_FILE 2>&1
-fi
+# Rebuild, and run the containers
+docker-compose up --build -d
 
-echo "Deployment completed at $(date)" | tee -a $LOG_FILE
+

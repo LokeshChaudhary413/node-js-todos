@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
-    "prod": "pm2 monitor"
+    "prod": "pm2-runtime start index.js --name 'node-js-todos' --watch"
   },
   "repository": {
     "type": "git",
