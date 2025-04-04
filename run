@@ -6,9 +6,3 @@ docker-compose down
 # Rebuild, and run the containers
 docker-compose up --build -d
 
-#update 
-#update Test 1
-#update Test 2
-#update Test 3
-#update Test 4
-#update Test 5
