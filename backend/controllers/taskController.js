@@ -116,6 +116,7 @@ const getAllTasks = async (req, res) => {
             categories,
             totalTasks: total,
             completedTasks: completed,
+            pendingTasks: pending,
             categoryCounts,
             additionalScripts,
             mainContent: dashboardContent,
@@ -260,6 +261,8 @@ const getCompletedTasks = async (req, res) => {
         const allTasks = await Task.find({ user: req.session.user._id });
         const totalTasks = allTasks.length;
         const completedTasks = allTasks.filter(task => task.completed).length;
+        const pendingTasks = totalTasks - completedTasks;
+
 
         // Count tasks by category for the sidebar
         const categoryCounts = {};
@@ -318,6 +321,7 @@ const getCompletedTasks = async (req, res) => {
             categories,
             totalTasks,
             completedTasks,
+            pendingTasks,
             categoryCounts,
             additionalScripts,
             mainContent: completedTasksContent,
