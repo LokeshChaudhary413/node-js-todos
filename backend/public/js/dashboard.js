@@ -16,29 +16,7 @@ if (hour >= 4 && hour < 12 && ampm === 'am') {
 }
 
 // add task section
-const addTask = document.getElementById('add-task-section');
-const addTaskForm = document.getElementById('add-task-form');
-const addTaskBtn = document.querySelector('.add-task-button');
-const navbar = document.querySelector('.nav-container');
-const mainContainer = document.querySelector('.main-container');
-const closeAddTaskSection = document.querySelector('.close-add-task-section');
-const body = document.getElementsByTagName('body')[0];
-
-addTaskBtn.addEventListener('click', () => {
-    addTask.style.opacity = '1';
-    addTask.style.pointerEvents = 'all';
-    navbar.style.filter = 'blur(5px)';
-    navbar.style.pointerEvents = 'none';
-    mainContainer.style.filter = 'blur(5px)';
-});
-
-closeAddTaskSection.addEventListener('click', () => {
-    addTask.style.opacity = '0';
-    addTask.style.pointerEvents = 'none';
-    navbar.style.filter = 'blur(0px)';
-    navbar.style.pointerEvents = 'all';
-    mainContainer.style.filter = 'blur(0px)';
-});
+// Note: Modal functionality is now handled in the inline script in dashboard.ejs
 
 // restricting the user from selecting a date before today
 var currentDate = new Date().toISOString().split("T")[0];
@@ -47,56 +25,7 @@ var dateInput = document.querySelector(".input-date");
 // Set the min attribute to the current date
 dateInput.setAttribute("min", currentDate);
 
-// category section (active category)
-const work = document.getElementById('work');
-const personal = document.getElementById('personal');
-const shopping = document.getElementById('shopping');
-const others = document.getElementById('others');
-
-work.addEventListener('click', () => {
-    work.classList.add('active-category');
-    personal.classList.remove('active-category');
-    shopping.classList.remove('active-category');
-    others.classList.remove('active-category');
-});
-
-personal.addEventListener('click', () => {
-    personal.classList.add('active-category');
-    work.classList.remove('active-category');
-    shopping.classList.remove('active-category');
-    others.classList.remove('active-category');
-});
-
-shopping.addEventListener('click', () => {
-    shopping.classList.add('active-category');
-    personal.classList.remove('active-category');
-    work.classList.remove('active-category');
-    others.classList.remove('active-category');
-});
-
-const addNewTask = document.querySelector('.add-new-task');
-addNewTask.addEventListener('click', () => {
-    work.classList.remove('active-category');
-    personal.classList.remove('active-category');
-    shopping.classList.remove('active-category');
-    others.classList.remove('active-category');
-});
-
-const categoryDivs = document.querySelectorAll('.category');
-
-categoryDivs.forEach((categoryDiv) => {
-    categoryDiv.addEventListener('click', () => {
-        const categoryValue = categoryDiv.getAttribute('data-id');
-        document.getElementById('category-choosed').value = categoryValue;
-    });
-});
-
-others.addEventListener('click', () => {
-    others.classList.add('active-category');
-    personal.classList.remove('active-category');
-    shopping.classList.remove('active-category');
-    work.classList.remove('active-category');
-});
+// Note: Category selection is now handled in the inline script in dashboard.ejs
 
 // category section (show list)
 const workCategory = document.getElementsByClassName('work-category');
@@ -173,13 +102,12 @@ async function loadTasks(status = 'all') {
 
 async function updateTaskStatus(taskId, newStatus) {
     try {
-        const response = await fetch(`/api/tasks/${taskId}/status`, {
-            method: 'PATCH',
+        const response = await fetch(`/api/tasks/${taskId}/toggle-status`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            credentials: 'same-origin',
-            body: JSON.stringify({ status: newStatus })
+            credentials: 'same-origin'
         });
 
         if (!response.ok) {
@@ -234,7 +162,7 @@ function displayTasks(tasks) {
                     <span class="task-time">${task.time || ''}</span>
                 </div>
                 <div class="task-actions">
-                    <button class="status-btn ${task.status}" onclick="updateTaskStatus('${task._id}', '${task.status === 'pending' ? 'completed' : 'pending'}')">${task.status === 'pending' ? 'Mark Complete' : 'Mark Pending'}</button>
+                    <button class="status-btn ${task.completed ? 'completed' : 'pending'}" onclick="updateTaskStatus('${task._id}')">${task.completed ? 'Mark Pending' : 'Mark Complete'}</button>
                     <button class="delete-btn" onclick="deleteTask('${task._id}')">Delete</button>
                 </div>
             </div>

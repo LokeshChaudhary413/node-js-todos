@@ -1,0 +1,238 @@
+<%
+// Define the active page for navigation highlighting
+const activePage = 'admin';
+
+// Define any additional styles specific to this page
+const additionalStyles = `<style>
+    /* Admin Users Page Styles */
+    .main-section {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .user-list {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .user-list th,
+    .user-list td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .user-list th {
+        background-color: #f8f8f8;
+        font-weight: bold;
+    }
+
+    .user-list tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .badge-user {
+        background-color: #2196F3;
+        color: white;
+    }
+
+    .badge-admin {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .badge-superadmin {
+        background-color: #F44336;
+        color: white;
+    }
+
+    .badge-guest {
+        background-color: #9E9E9E;
+        color: white;
+    }
+
+    .user-actions {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        padding: 5px 10px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+    .profile-btn {
+        background-color: #4CAF50;
+    }
+
+    .edit-btn {
+        background-color: #2196F3;
+    }
+
+    .masquerade-btn {
+        background-color: #FF9800;
+    }
+
+    .action-btn:hover {
+        opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+        .user-list {
+            display: block;
+            overflow-x: auto;
+        }
+        
+        .user-actions {
+            flex-direction: column;
+        }
+    }
+</style>`;
+
+// Define any additional scripts specific to this page
+const additionalScripts = `<script>
+    // Any additional scripts for the admin users page can go here
+</script>`;
+%>
+
+<%- include('../partials/admin-header', { 
+    title: title, 
+    user: user, 
+    activePage: activePage, 
+    additionalStyles: additionalStyles, 
+    messages: messages 
+}) %>
+
+<div class="main-container">
+    <!-- Left Sidebar -->
+    <div class="leftside-nav">
+        <div class="nav-heading">
+            <h5>Admin Panel</h5>
+        </div>
+        <ul type="none" class="leftside-nav-ul">
+            <a href="/admin">
+                <li><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+            </a>
+            <a href="/admin/users" class="active">
+                <li><i class="fas fa-users"></i> Users</li>
+            </a>
+            <a href="/tasks/admin/all">
+                <li><i class="fas fa-tasks"></i> All Tasks</li>
+            </a>
+            <a href="/admin/categories">
+                <li><i class="fas fa-tags"></i> Categories</li>
+            </a>
+            <% if (user.role === 'superadmin') { %>
+                <a href="/admin/masquerade">
+                    <li><i class="fas fa-user-secret"></i> Masquerade</li>
+                </a>
+            <% } %>
+            <a href="/dashboard">
+                <li><i class="fas fa-home"></i> Back to App</li>
+            </a>
+        </ul>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="main-section">
+        <div class="upper-section">
+            <div class="greeting-user-section">
+                <h2 class="greeting-user">User Management</h2>
+                <span>
+                    View and manage all users in the system
+                </span>
+            </div>
+        </div>
+
+        <!-- Users List -->
+        <div class="card">
+            <h2>All Users</h2>
+
+            <table class="user-list">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(function(userItem) { %>
+                        <tr>
+                            <td>
+                                <%= userItem.firstName %> <%= userItem.lastName %>
+                            </td>
+                            <td>
+                                <%= userItem.email %>
+                            </td>
+                            <td>
+                                <% if (userItem.role === 'user') { %>
+                                    <span class="badge badge-user">User</span>
+                                <% } else if (userItem.role === 'admin') { %>
+                                    <span class="badge badge-admin">Admin</span>
+                                <% } else if (userItem.role === 'superadmin') { %>
+                                    <span class="badge badge-superadmin">Superadmin</span>
+                                <% } else if (userItem.role === 'guest') { %>
+                                    <span class="badge badge-guest">Guest</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <div class="user-actions">
+                                    <a href="/admin/users/<%= userItem._id %>/profile" class="action-btn profile-btn">
+                                        <i class="fas fa-user-edit"></i> Profile
+                                    </a>
+
+                                    <a href="/admin/users/<%= userItem._id %>/edit" class="action-btn edit-btn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+
+                                    <% if (user.role === 'superadmin') { %>
+                                        <a href="/admin/masquerade/<%= userItem._id %>" class="action-btn masquerade-btn">
+                                            <i class="fas fa-user-secret"></i> Masquerade
+                                        </a>
+                                    <% } %>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <%- include('../partials/admin-footer', { 
+        user: user, 
+        categories: categories || [], 
+        totalTasks: totalTasks || 0, 
+        completedTasks: completedTasks || 0, 
+        categoryCounts: categoryCounts || {}, 
+        additionalScripts: additionalScripts 
+    }) %>

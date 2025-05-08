@@ -1,8 +1,13 @@
 #!/bin/bash
 
+# Create uploads directory if it doesn't exist
+mkdir -p backend/public/uploads
+chmod 777 backend/public/uploads
+
 # Stop and remove containers
 docker-compose down
 
 # Rebuild, and run the containers
-docker-compose up --build -d
+# docker-compose up --build -d
 
+docker-compose up  -d

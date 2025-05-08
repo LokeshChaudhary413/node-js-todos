@@ -1,0 +1,325 @@
+<!-- Completed Tasks Content -->
+<div class="upper-section">
+  <div class="greeting-user-section">
+    <h2 class="greeting-user"><%= title %></h2>
+    <div>
+      Here are all your completed tasks
+    </div>
+  </div>
+</div>
+<div class="task-info">
+  <div>
+    <h5><%= title %></h5>
+  </div>
+  <div class="add-task-button-section">
+    <a href="/tasks/manage" class="btn-link">
+      <button class="add-task-button">Add New Task</button>
+    </a>
+  </div>
+</div>
+<div class="bottom-section">
+  <% let totalWork=0 %>
+  <% let totalPersonal=0 %>
+  <% let totalShopping=0 %>
+  <% let totalOther=0 %>
+
+  <% let completedWork=0 %>
+  <% let completedPersonal=0 %>
+  <% let completedShopping=0 %>
+  <% let completedOther=0 %>
+
+  <% let total=0; %>
+  <% let completed=0; %>
+
+  <% if (tasks && tasks.length> 0) { %>
+  <% for (let i of tasks) { %>
+  <% total++; %>
+  <% if (i.completed==true) { %>
+  <% completed++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="work") { %>
+  <% totalWork++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="personal") { %>
+  <% totalPersonal++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="shopping") { %>
+  <% totalShopping++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="others") { %>
+  <% totalOther++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="work" && i.completed==true) { %>
+  <% completedWork++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="personal" && i.completed==true) { %>
+  <% completedPersonal++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="shopping" && i.completed==true) { %>
+  <% completedShopping++; %>
+  <% } %>
+  <% if (i.categoryChoosed=="others" && i.completed==true) { %>
+  <% completedOther++; %>
+  <% } %>
+  <% } %>
+  <% } %>
+  <% let pending=total - completed; %>
+  <div class="work-category">
+    <ul type="none" class="category-ul">
+      <div class="category-section" id="work-category">
+        <div class="category-section-left">
+          <img src="https://cdn-icons-png.flaticon.com/512/3281/3281289.png" alt="">
+          <h5>Work
+          </h5>
+        </div>
+        <div>
+          <span class="category-section-right">
+            <%= completedWork %>
+            Tasks
+          </span>
+        </div>
+      </div>
+      <% if (tasks && tasks.length> 0) { %>
+      <% for (let i of tasks) { %>
+      <% if (i.categoryChoosed=="work") { %>
+      <li class="work-category-list">
+        <div class="list-main-section">
+          <div class="left-side-section" data-id="<%= i._id %>">
+            <div class="inner-left-side">
+              <div class="display-task">
+                <%= i.title %>
+              </div>
+              <div class="display-des">
+                <%= i.description %>
+              </div>
+            </div>
+            <div class="right-side">
+              <div>
+                <%= i.date %>
+              </div>
+            </div>
+          </div>
+          <div class="complete-task-section">
+            <form action="/tasks/<%= i._id %>/status?_method=PATCH" method="POST" style="display: inline;">
+              <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="">
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="list-buttom-section">
+          <div class="left-buttom-side-section">
+            <div class="inner-left-side">
+              <div>
+                <div>
+                  Task
+                  Created
+                </div>
+                <div>
+                  <%= i.currentDate %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <% } %>
+      <% } %>
+      <% } %>
+    </ul>
+  </div>
+  <div class="personal-category">
+    <ul type="none" class="category-ul">
+      <div class="category-section" id="personal-category">
+        <div class="category-section-left">
+          <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" alt="">
+          <h5>Personal
+          </h5>
+        </div>
+        <div>
+          <span class="category-section-right">
+            <%= completedPersonal %>
+            Tasks
+          </span>
+        </div>
+      </div>
+      <% if (tasks && tasks.length> 0) { %>
+      <% for (let i of tasks) { %>
+      <% if (i.categoryChoosed=="personal") { %>
+      <li class="personal-category-list">
+        <div class="list-main-section">
+          <div class="left-side-section">
+            <div class="inner-left-side">
+              <div class="display-task">
+                <%= i.title %>
+              </div>
+              <div class="display-des">
+                <%= i.description %>
+              </div>
+            </div>
+            <div class="right-side">
+              <div>
+                <%= i.date %>
+              </div>
+            </div>
+          </div>
+          <div class="complete-task-section">
+            <form action="/tasks/<%= i._id %>/status?_method=PATCH" method="POST" style="display: inline;">
+              <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="">
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="list-buttom-section">
+          <div class="left-buttom-side-section">
+            <div class="inner-left-side">
+              <div>
+                <div>
+                  Task
+                  Created
+                </div>
+                <div>
+                  <%= i.currentDate %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </li>
+      <% } %>
+      <% } %>
+      <% } %>
+    </ul>
+  </div>
+  <div class="shopping-category">
+    <ul type="none" class="category-ul">
+      <div class="category-section" id="shopping-category">
+        <div class="category-section-left">
+          <img src="https://cdn-icons-png.flaticon.com/512/4290/4290854.png" alt="">
+          <h5>Shopping
+          </h5>
+        </div>
+        <div>
+          <span class="category-section-right">
+            <%= completedShopping %>
+            Tasks
+          </span>
+        </div>
+      </div>
+      <% if (tasks && tasks.length> 0) { %>
+      <% for (let i of tasks) { %>
+      <% if (i.categoryChoosed=="shopping") { %>
+      <li class="shopping-category-list">
+        <div class="list-main-section">
+          <div class="left-side-section">
+            <div class="inner-left-side">
+              <div class="display-task">
+                <%= i.title %>
+              </div>
+              <div class="display-des">
+                <%= i.description %>
+              </div>
+            </div>
+            <div class="right-side">
+              <div>
+                <%= i.date %>
+              </div>
+            </div>
+          </div>
+          <div class="complete-task-section">
+            <form action="/tasks/<%= i._id %>/status?_method=PATCH" method="POST" style="display: inline;">
+              <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="">
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="list-buttom-section">
+          <div class="left-buttom-side-section">
+            <div class="inner-left-side">
+              <div>
+                <div>
+                  Task
+                  Created
+                </div>
+                <div>
+                  <%= i.currentDate %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </li>
+      <% } %>
+      <% } %>
+      <% } %>
+    </ul>
+  </div>
+  <div class="other-category">
+    <ul type="none" class="category-ul">
+      <div class="category-section" id="other-category">
+        <div class="category-section-left">
+          <img src="https://cdn-icons-png.flaticon.com/512/7245/7245102.png" alt="">
+          <h5>Others
+          </h5>
+        </div>
+        <div>
+          <span class="category-section-right">
+            <%= completedOther %>
+            Tasks
+          </span>
+        </div>
+      </div>
+      <% if (tasks && tasks.length> 0) { %>
+      <% for (let i of tasks) { %>
+      <% if (i.categoryChoosed=="others") { %>
+      <li class="others-category-list">
+        <div class="list-main-section">
+          <div class="left-side-section">
+            <div class="inner-left-side">
+              <div class="display-task">
+                <%= i.title %>
+              </div>
+              <div class="display-des">
+                <%= i.description %>
+              </div>
+            </div>
+            <div class="right-side">
+              <div>
+                <%= i.date %>
+              </div>
+            </div>
+          </div>
+          <div class="complete-task-section">
+            <form action="/tasks/<%= i._id %>/status?_method=PATCH" method="POST" style="display: inline;">
+              <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="">
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="list-buttom-section">
+          <div class="left-buttom-side-section">
+            <div class="inner-left-side">
+              <div>
+                <div>
+                  Task
+                  Created
+                </div>
+                <div>
+                  <%= i.currentDate %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <% } %>
+      <% } %>
+      <% } %>
+    </ul>
+  </div>
+</div>

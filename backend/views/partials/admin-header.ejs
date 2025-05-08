@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/nav-fix.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/7692/7692809.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <% if (typeof additionalStyles !== 'undefined') { %>
+        <%- additionalStyles %>
+    <% } %>
+    <style>
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .flash-message {
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .flash-success {
+            background-color: #4CAF50;
+        }
+
+        .flash-error {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    <% if (messages && messages.success && messages.success.length > 0) { %>
+        <div class="flash-messages">
+            <div class="flash-message flash-success">
+                <%= messages.success %>
+            </div>
+        </div>
+    <% } %>
+    <% if (messages && messages.error && messages.error.length > 0) { %>
+        <div class="flash-messages">
+            <div class="flash-message flash-error">
+                <%= messages.error %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Masquerade Banner -->
+    <% if (locals.isMasqueraded) { %>
+        <div class="masquerade-banner">
+            <div>You are currently masquerading as <%= user.firstName %> <%= user.lastName %></div>
+            <a href="/admin/stop-masquerade">Stop Masquerading</a>
+        </div>
+    <% } %>
+
+    <!-- Navigation Bar -->
+    <div class="nav-container">
+        <div class="nav">
+            <div class="logo">
+                <a href="/dashboard">
+                    <img src="https://cdn-icons-png.flaticon.com/512/7692/7692809.png" alt="Todo Logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="/dashboard" class="<%= activePage === 'dashboard' ? 'active' : '' %>">Dashboard</a></li>
+                    <li><a href="/profile" class="<%= activePage === 'profile' ? 'active' : '' %>">Profile</a></li>
+                    <% if (user && (user.role === 'admin' || user.role === 'superadmin')) { %>
+                        <li><a href="/admin" class="<%= activePage === 'admin' ? 'active' : '' %>">Admin</a></li>
+                    <% } %>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>

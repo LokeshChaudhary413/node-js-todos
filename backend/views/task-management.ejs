@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/task-management.css">
+    <link rel="stylesheet" href="/css/nav-fix.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/7692/7692809.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <style>
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .flash-message {
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+
+        .flash-message.success {
+            background-color: #4CAF50;
+        }
+
+        .flash-message.error {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flash-messages">
+        <% if (messages.success && messages.success.length > 0) { %>
+            <div class="flash-message success">
+                <%= messages.success %>
+            </div>
+        <% } %>
+        <% if (messages.error && messages.error.length > 0) { %>
+            <div class="flash-message error">
+                <%= messages.error %>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="container">
+        <div class="nav-container">
+            <div class="nav">
+                <div class="logo">
+                    <a href="<%= baseUrl %>/dashboard">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7692/7692809.png" alt="Todo Logo">
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <ul>
+                        <li><a href="<%= baseUrl %>/dashboard">Dashboard</a></li>
+                        <li><a href="<%= baseUrl %>/profile">Profile</a></li>
+                        <% if (user.role === 'admin' || user.role === 'superadmin') { %>
+                            <li><a href="<%= baseUrl %>/admin">Admin</a></li>
+                        <% } %>
+                        <li><a href="<%= baseUrl %>/logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="main">
+                <div class="sidebar">
+                    <div class="sidebar-links">
+                        <ul>
+                            <a href="<%= baseUrl %>/dashboard">
+                                <li><i class="fas fa-home"></i> Dashboard</li>
+                            </a>
+                            <a href="<%= baseUrl %>/tasks/manage" class="active">
+                                <li><i class="fas fa-tasks"></i> Manage Tasks</li>
+                            </a>
+                            <a href="<%= baseUrl %>/tasks/pending">
+                                <li><i class="fas fa-clock"></i> Pending Tasks</li>
+                            </a>
+                            <a href="<%= baseUrl %>/tasks/completed">
+                                <li><i class="fas fa-check-circle"></i> Completed Tasks</li>
+                            </a>
+                            <a href="<%= baseUrl %>/tasks/forms">
+                                <li><i class="fas fa-plus-square"></i> Quick Add Forms</li>
+                            </a>
+                            <a href="<%= baseUrl %>/categories">
+                                <li><i class="fas fa-tag"></i> Categories</li>
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="main-section">
+                    <div class="task-management-header">
+                        <h1><i class="fas fa-tasks"></i> Task Management</h1>
+                        <div class="task-actions">
+                            <button id="new-task-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Task</button>
+                        </div>
+                    </div>
+
+                    <div class="task-filters">
+                        <div class="filter-group">
+                            <label for="category-filter"><i class="fas fa-filter"></i> Filter by Category:</label>
+                            <select id="category-filter">
+                                <option value="all">All Categories</option>
+                                <!-- Categories will be loaded dynamically -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="status-filter"><i class="fas fa-tasks"></i> Filter by Status:</label>
+                            <select id="status-filter">
+                                <option value="all">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <button id="apply-filters" class="btn btn-secondary"><i class="fas fa-search"></i> Apply Filters</button>
+                            <button id="reset-filters" class="btn btn-outline"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </div>
+
+                    <div class="task-list-container">
+                        <table class="task-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-file-alt"></i> Title</th>
+                                    <th><i class="fas fa-tag"></i> Category</th>
+                                    <th><i class="fas fa-calendar-alt"></i> Due Date</th>
+                                    <th><i class="fas fa-info-circle"></i> Status</th>
+                                    <th><i class="fas fa-cogs"></i> Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="task-list">
+                                <!-- Tasks will be loaded dynamically -->
+                                <tr class="loading-row">
+                                    <td colspan="5"><i class="fas fa-spinner fa-spin"></i> Loading tasks...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="aside-section">
+                    <div class="profile-section">
+                        <div class="username-section">
+                            <div>Hello, <%= user.firstName %></div>
+                        </div>
+                        <a href="/profile" style="text-decoration: none; color: inherit;">
+                            <div class="userimage">
+                                <img src="<%= user.profileImage || '/img/avatar.svg' %>" alt="User Avatar">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="profile-task-info-section">
+                        <div class="profile-total-tasks-info">
+                            <div class="total-tasks-info-heading">
+                                <h5><i class="fas fa-tasks"></i> Total Tasks</h5>
+                            </div>
+                            <div class="total-tasks-info-number">
+                                <h5 id="total-tasks-count">0</h5>
+                            </div>
+                        </div>
+                        <div class="profile-completed-tasks-info">
+                            <div class="completed-tasks-info-heading">
+                                <h5><i class="fas fa-check-circle"></i> Completed</h5>
+                            </div>
+                            <div class="completed-tasks-info-number">
+                                <h5 id="completed-tasks-count">0</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-info-section">
+                        <div class="category-info-heading">
+                            <h5><i class="fas fa-chart-pie"></i> Categories</h5>
+                        </div>
+                        <div class="category-info-list" id="category-summary">
+                            <!-- Category summary will be loaded dynamically -->
+                            <div class="loading-categories"><i class="fas fa-spinner fa-spin"></i> Loading categories...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Form Modal -->
+    <div id="task-form-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="task-form-title"><i class="fas fa-edit"></i> Create New Task</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <form id="task-form">
+                <input type="hidden" id="task-id" name="taskId">
+                <div class="input-field">
+                    <label for="task-title"><i class="fas fa-heading"></i> Task Title</label>
+                    <input type="text" id="task-title" name="title" placeholder="Enter task title" required>
+                </div>
+
+                <div class="input-field">
+                    <label for="task-description"><i class="fas fa-align-left"></i> Description</label>
+                    <textarea id="task-description" name="description" placeholder="Enter task description"></textarea>
+                </div>
+
+                <div class="input-field">
+                    <label for="task-category"><i class="fas fa-tag"></i> Category</label>
+                    <select id="task-category" name="categoryChoosed" required>
+                        <option value="">Select a category</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+
+                <div class="input-field">
+                    <label for="task-date"><i class="fas fa-calendar-alt"></i> Due Date</label>
+                    <input type="date" id="task-date" name="date" required>
+                </div>
+
+                <div class="input-field">
+                    <label for="task-time"><i class="fas fa-clock"></i> Due Time (optional)</label>
+                    <input type="time" id="task-time" name="time">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="cancel-task-btn" class="btn btn-outline"><i class="fas fa-times"></i> Cancel</button>
+                    <button type="submit" id="save-task-btn" class="btn btn-primary"><i class="fas fa-save"></i> Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-trash-alt"></i> Confirm Delete</h3>
+                <span class="close-delete-modal">&times;</span>
+            </div>
+            <div class="delete-modal-content">
+                <p>Are you sure you want to delete this task? This action cannot be undone.</p>
+                <div class="delete-modal-actions">
+                    <button id="cancel-delete-btn" class="btn btn-outline"><i class="fas fa-times"></i> Cancel</button>
+                    <button id="confirm-delete-btn" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Template -->
+    <div id="notification-template" class="notification" style="display: none;"></div>
+
+    <footer>
+        <span>@ Developed By Lokesh Chaudhary</span>
+    </footer>
+
+    <script src="/js/dashboard.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script>
+        // Task management functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const taskFormModal = document.getElementById('task-form-modal');
+            const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+            const newTaskBtn = document.getElementById('new-task-btn');
+            const closeModalBtn = document.querySelector('.close-modal');
+            const closeDeleteModalBtn = document.querySelector('.close-delete-modal');
+            const taskForm = document.getElementById('task-form');
+            const cancelTaskBtn = document.getElementById('cancel-task-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const categoryFilter = document.getElementById('category-filter');
+            const statusFilter = document.getElementById('status-filter');
+            const applyFiltersBtn = document.getElementById('apply-filters');
+            const resetFiltersBtn = document.getElementById('reset-filters');
+
+            let currentTaskId = null;
+            let tasks = [];
+            let categories = [];
+
+            // Initialize
+            loadTasks();
+            loadCategories();
+            loadCategorySummary();
+
+            // Event listeners
+            newTaskBtn.addEventListener('click', () => openTaskForm());
+            closeModalBtn.addEventListener('click', () => closeTaskForm());
+            cancelTaskBtn.addEventListener('click', () => closeTaskForm());
+            closeDeleteModalBtn.addEventListener('click', () => closeDeleteConfirm());
+            cancelDeleteBtn.addEventListener('click', () => closeDeleteConfirm());
+            confirmDeleteBtn.addEventListener('click', deleteTask);
+            taskForm.addEventListener('submit', saveTask);
+            applyFiltersBtn.addEventListener('click', applyFilters);
+            resetFiltersBtn.addEventListener('click', resetFilters);
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === taskFormModal) {
+                    closeTaskForm();
+                }
+                if (event.target === deleteConfirmModal) {
+                    closeDeleteConfirm();
+                }
+            });
+
+            // Functions
+            function openTaskForm(taskId = null) {
+                // Reset form
+                taskForm.reset();
+                document.getElementById('task-id').value = '';
+                document.getElementById('category-choosed').value = '';
+                document.getElementById('category-id').value = '';
+                document.querySelectorAll('.category').forEach(cat => {
+                    cat.classList.remove('selected');
+                    cat.classList.remove('active-category');
+                });
+
+                // Set default date to today
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('task-date').value = today;
+
+                // If editing existing task
+                if (taskId) {
+                    currentTaskId = taskId;
+                    const task = tasks.find(t => t._id === taskId);
+                    if (task) {
+                        document.getElementById('task-form-title').textContent = 'Edit Task';
+                        document.getElementById('task-id').value = task._id;
+                        document.getElementById('task-title').value = task.title;
+                        document.getElementById('task-description').value = task.description || '';
+                        document.getElementById('task-date').value = task.date;
+                        document.getElementById('task-time').value = task.time || '';
+                        document.getElementById('category-choosed').value = task.categoryChoosed;
+                        document.getElementById('category-id').value = task.category || '';
+
+                        // Select the category
+                        const categoryEl = document.querySelector(`.category[data-id="${task.categoryChoosed}"]`);
+                        if (categoryEl) {
+                            categoryEl.classList.add('selected');
+                            categoryEl.classList.add('active-category');
+                        }
+                    }
+                } else {
+                    document.getElementById('task-form-title').textContent = 'Create New Task';
+                    currentTaskId = null;
+                }
+
+                taskFormModal.style.display = 'block';
+            }
+
+            function closeTaskForm() {
+                taskFormModal.style.display = 'none';
+            }
+
+            function openDeleteConfirm(taskId) {
+                currentTaskId = taskId;
+                deleteConfirmModal.style.display = 'block';
+            }
+
+            function closeDeleteConfirm() {
+                deleteConfirmModal.style.display = 'none';
+                currentTaskId = null;
+            }
+
+            async function loadTasks(categoryFilter = 'all', statusFilter = 'all') {
+                const taskList = document.getElementById('task-list');
+                taskList.innerHTML = '<tr class="loading-row"><td colspan="5">Loading tasks...</td></tr>';
+
+                try {
+                    let url = '/api/tasks';
+                    if (statusFilter !== 'all') {
+                        url = `/api/tasks/${statusFilter}`;
+                    }
+
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch tasks');
+                    }
+
+                    tasks = await response.json();
+
+                    // Filter by category if needed
+                    if (categoryFilter !== 'all') {
+                        tasks = tasks.filter(task => task.categoryChoosed === categoryFilter);
+                    }
+
+                    // Update counts
+                    document.getElementById('total-tasks-count').textContent = tasks.length;
+                    document.getElementById('completed-tasks-count').textContent =
+                        tasks.filter(task => task.completed).length;
+
+                    // Render tasks
+                    renderTasks(tasks);
+                } catch (error) {
+                    console.error('Error loading tasks:', error);
+                    taskList.innerHTML = '<tr><td colspan="5">Error loading tasks. Please try again.</td></tr>';
+                }
+            }
+
+            function renderTasks(tasks) {
+                const taskList = document.getElementById('task-list');
+
+                if (tasks.length === 0) {
+                    taskList.innerHTML = '<tr><td colspan="5">No tasks found</td></tr>';
+                    return;
+                }
+
+                taskList.innerHTML = '';
+
+                tasks.forEach(task => {
+                    const row = document.createElement('tr');
+                    row.className = task.completed ? 'completed-task' : '';
+
+                    row.innerHTML = `
+                        <td>${task.title}</td>
+                        <td><span class="category-badge ${task.categoryChoosed}">${task.categoryChoosed}</span></td>
+                        <td>${task.date}${task.time ? ' ' + task.time : ''}</td>
+                        <td>
+                            <span class="status-badge ${task.completed ? 'completed' : 'pending'}">
+                                ${task.completed ? 'Completed' : 'Pending'}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <button class="btn-icon toggle-status" data-id="${task._id}" data-status="${task.completed}">
+                                <i class="fas ${task.completed ? 'fa-times' : 'fa-check'}"></i>
+                            </button>
+                            <button class="btn-icon edit-task" data-id="${task._id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon delete-task" data-id="${task._id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+
+                    taskList.appendChild(row);
+                });
+
+                // Add event listeners to action buttons
+                document.querySelectorAll('.toggle-status').forEach(btn => {
+                    btn.addEventListener('click', () => toggleTaskStatus(btn.dataset.id, btn.dataset.status === 'true'));
+                });
+
+                document.querySelectorAll('.edit-task').forEach(btn => {
+                    btn.addEventListener('click', () => openTaskForm(btn.dataset.id));
+                });
+
+                document.querySelectorAll('.delete-task').forEach(btn => {
+                    btn.addEventListener('click', () => openDeleteConfirm(btn.dataset.id));
+                });
+            }
+
+            async function loadCategories() {
+                try {
+                    const response = await fetch('/categories/api');
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch categories');
+                    }
+
+                    const data = await response.json();
+                    categories = data.categories;
+
+                    // Populate category filter
+                    const categoryFilter = document.getElementById('category-filter');
+                    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.name.toLowerCase();
+                        option.textContent = category.name;
+                        categoryFilter.appendChild(option);
+                    });
+
+                    // Populate categories in task form
+                    const categoriesContainer = document.getElementById('categories-container');
+
+                    if (categories.length > 0) {
+                        categoriesContainer.innerHTML = '';
+
+                        categories.forEach(category => {
+                            const categoryDiv = document.createElement('div');
+                            categoryDiv.className = 'category';
+                            categoryDiv.id = category.name.toLowerCase();
+                            categoryDiv.dataset.id = category.name.toLowerCase();
+                            categoryDiv.dataset.categoryId = category._id;
+
+                            if (category.color) {
+                                categoryDiv.style.borderColor = category.color;
+                            }
+
+                            categoryDiv.innerHTML = `
+                                <img src="${category.icon}" alt="${category.name}">
+                                <div>
+                                    <span>${category.name}</span>
+                                </div>
+                            `;
+
+                            categoryDiv.addEventListener('click', function() {
+                                // Remove selected class from all categories
+                                document.querySelectorAll('.category').forEach(cat => {
+                                    cat.classList.remove('selected');
+                                    cat.classList.remove('active-category');
+                                });
+
+                                // Add selected class to clicked category
+                                this.classList.add('selected');
+                                this.classList.add('active-category');
+
+                                // Set hidden input values
+                                document.getElementById('category-choosed').value = this.dataset.id;
+                                document.getElementById('category-id').value = this.dataset.categoryId;
+                            });
+
+                            categoriesContainer.appendChild(categoryDiv);
+                        });
+                    } else {
+                        categoriesContainer.innerHTML = '<div class="no-categories">No categories found</div>';
+                    }
+                } catch (error) {
+                    console.error('Error loading categories:', error);
+                    document.getElementById('categories-container').innerHTML =
+                        '<div class="error-loading">Error loading categories</div>';
+                }
+            }
+
+            async function loadCategorySummary() {
+                try {
+                    const response = await fetch('/api/tasks');
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch tasks');
+                    }
+
+                    const tasks = await response.json();
+                    const categorySummary = document.getElementById('category-summary');
+
+                    // Count tasks by category
+                    const categoryCounts = {};
+                    tasks.forEach(task => {
+                        const category = task.categoryChoosed;
+                        if (!categoryCounts[category]) {
+                            categoryCounts[category] = { total: 0, completed: 0 };
+                        }
+                        categoryCounts[category].total++;
+                        if (task.completed) {
+                            categoryCounts[category].completed++;
+                        }
+                    });
+
+                    // Render category summary
+                    if (Object.keys(categoryCounts).length > 0) {
+                        categorySummary.innerHTML = '';
+
+                        Object.entries(categoryCounts).forEach(([category, counts]) => {
+                            const categoryItem = document.createElement('div');
+                            categoryItem.className = 'category-item';
+
+                            categoryItem.innerHTML = `
+                                <div class="category-name">
+                                    <span class="category-badge ${category}">${category}</span>
+                                </div>
+                                <div class="category-count">
+                                    <span>${counts.completed}/${counts.total}</span>
+                                </div>
+                            `;
+
+                            categorySummary.appendChild(categoryItem);
+                        });
+                    } else {
+                        categorySummary.innerHTML = '<div class="no-categories">No categories found</div>';
+                    }
+                } catch (error) {
+                    console.error('Error loading category summary:', error);
+                    document.getElementById('category-summary').innerHTML =
+                        '<div class="error-loading">Error loading categories</div>';
+                }
+            }
+
+            async function saveTask(e) {
+                e.preventDefault();
+
+                const taskId = document.getElementById('task-id').value;
+                const title = document.getElementById('task-title').value;
+                const description = document.getElementById('task-description').value;
+                const date = document.getElementById('task-date').value;
+                const time = document.getElementById('task-time').value;
+                const categoryChoosed = document.getElementById('category-choosed').value;
+                const category = document.getElementById('category-id').value;
+
+                if (!title || !date || !categoryChoosed) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                const taskData = {
+                    title,
+                    description,
+                    date,
+                    time,
+                    categoryChoosed,
+                    category
+                };
+
+                try {
+                    let url = '/tasks';
+                    let method = 'POST';
+
+                    if (taskId) {
+                        url = `/tasks/${taskId}`;
+                        method = 'PUT';
+                    }
+
+                    const response = await fetch(url, {
+                        method,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(taskData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to save task');
+                    }
+
+                    // Close form and reload tasks
+                    closeTaskForm();
+                    loadTasks(categoryFilter.value, statusFilter.value);
+                    loadCategorySummary();
+
+                    // Show success message
+                    showNotification(taskId ? 'Task updated successfully' : 'Task created successfully', 'success');
+                } catch (error) {
+                    console.error('Error saving task:', error);
+                    showNotification('Error saving task', 'error');
+                }
+            }
+
+            async function toggleTaskStatus(taskId, currentStatus) {
+                try {
+                    const response = await fetch(`/tasks/${taskId}/toggle-status`, {
+                        method: 'POST'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update task status');
+                    }
+
+                    // Reload tasks
+                    loadTasks(categoryFilter.value, statusFilter.value);
+                    loadCategorySummary();
+
+                    // Show success message
+                    showNotification('Task status updated', 'success');
+                } catch (error) {
+                    console.error('Error updating task status:', error);
+                    showNotification('Error updating task status', 'error');
+                }
+            }
+
+            async function deleteTask() {
+                if (!currentTaskId) return;
+
+                try {
+                    const response = await fetch(`/tasks/${currentTaskId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to delete task');
+                    }
+
+                    // Close modal and reload tasks
+                    closeDeleteConfirm();
+                    loadTasks(categoryFilter.value, statusFilter.value);
+                    loadCategorySummary();
+
+                    // Show success message
+                    showNotification('Task deleted successfully', 'success');
+                } catch (error) {
+                    console.error('Error deleting task:', error);
+                    showNotification('Error deleting task', 'error');
+                }
+            }
+
+            function applyFilters() {
+                const categoryValue = categoryFilter.value;
+                const statusValue = statusFilter.value;
+                loadTasks(categoryValue, statusValue);
+            }
+
+            function resetFilters() {
+                categoryFilter.value = 'all';
+                statusFilter.value = 'all';
+                loadTasks();
+            }
+
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `flash-message ${type}`;
+                notification.textContent = message;
+
+                const flashMessages = document.querySelector('.flash-messages');
+                flashMessages.appendChild(notification);
+
+                // Remove notification after 3 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>
