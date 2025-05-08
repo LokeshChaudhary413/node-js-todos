@@ -37,16 +37,16 @@
             </div>
 
             <% if (typeof error !=="undefined" && error.length> 0) { %>
-                <div class="error-message">
+                <div class="error-message" style="background-color: #583737; color: white; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
                     <%= error %>
                 </div>
-                <% } %>
+            <% } %>
 
-                    <button type="submit" class="login-btn">Login</button>
+            <button type="submit" class="login-btn">Login</button>
 
-                    <div class="register-link">
-                        Don't have an account? <a href="/register">Register</a>
-                    </div>
+            <div class="register-link">
+                Don't have an account? <a href="/register">Register</a>
+            </div>
         </form>
     </div>
 
