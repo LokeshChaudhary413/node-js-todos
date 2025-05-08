@@ -1,0 +1,11 @@
+<%- include('header.ejs', { user: user, activePage: activePage, additionalStyles: additionalStyles, messages: messages }) %>
+
+    
+
+        <!-- Main Content Section -->
+        <div class="main-section">
+            <div class="main-content">
+                <%- mainContent %>
+            </div>
+
+        <%- include('footer.ejs', { user: user, categories: categories || [], totalTasks: totalTasks || 0, completedTasks: completedTasks || 0, pendingTasks: pendingTasks || 0, categoryCounts: categoryCounts || {}, additionalScripts: additionalScripts }) %>

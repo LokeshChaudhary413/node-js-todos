@@ -33,8 +33,17 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
+    enum: ['guest', 'user', 'admin', 'superadmin'],
     default: 'user'
+  },
+  masqueradingAs: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+  profileImage: {
+    type: String,
+    default: ''
   },
   gender: {
     type: String,
@@ -88,7 +97,18 @@ userSchema.statics.registerUser = async function (userData) {
 
   // Create and save the user
   const user = new this({ ...userData, password: hashedPassword });
-  return await user.save();
+  await user.save();
+
+  // Create default categories for the user
+  try {
+    const Category = require('./category');
+    await Category.createDefaultCategories(user._id);
+  } catch (error) {
+    console.error('Error creating default categories:', error);
+    // Continue even if category creation fails
+  }
+
+  return user;
 };
 
 

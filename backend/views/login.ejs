@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/login.css">
-    <title><%= title ?? 'Login' %></title>
+    <title>
+        <%= title ?? 'Login' %>
+    </title>
 </head>
+
 <body>
     <div class="login-container">
         <h1 class="login-title">Welcome Back</h1>
@@ -22,7 +27,8 @@
                 <div class="password-input">
                     <input type="password" id="password" name="password" required placeholder="Enter your password">
                     <button type="button" class="toggle-password" onclick="togglePassword()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
@@ -30,17 +36,17 @@
                 </div>
             </div>
 
-            <% if (typeof error !== "undefined" && error.length > 0) { %>
+            <% if (typeof error !=="undefined" && error.length> 0) { %>
                 <div class="error-message">
                     <%= error %>
                 </div>
-            <% } %>
+                <% } %>
 
-            <button type="submit" class="login-btn">Login</button>
+                    <button type="submit" class="login-btn">Login</button>
 
-            <div class="register-link">
-                Don't have an account? <a href="/register">Register</a>
-            </div>
+                    <div class="register-link">
+                        Don't have an account? <a href="/register">Register</a>
+                    </div>
         </form>
     </div>
 
@@ -48,7 +54,7 @@
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const toggleBtn = document.querySelector('.toggle-password');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleBtn.classList.add('show');
@@ -58,5 +64,9 @@
             }
         }
     </script>
+    <footer>
+        <span>@ Developed By Lokesh Chaudhary</span>
+    </footer>
 </body>
+
 </html>

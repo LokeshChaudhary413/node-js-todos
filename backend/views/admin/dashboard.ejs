@@ -1,0 +1,258 @@
+<%
+// Define the active page for navigation highlighting
+const activePage = 'admin';
+
+// Define any additional styles specific to this page
+const additionalStyles = `<style>
+    /* Admin Dashboard Styles */
+    .main-section {
+    flex: 1;
+    padding: 20px;
+    }
+
+    .dashboard-cards {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
+    gap: 20px;
+    margin-bottom: 30px;
+    }
+
+    .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    }
+
+    .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    }
+
+    .card-icon {
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    }
+
+    .card-title {
+    font-size: 14px;
+    color: #777;
+    }
+
+    .card-value {
+    font-size: 28px;
+    font-weight: bold;
+    }
+
+    .users-icon {
+    background-color: #4CAF50;
+    }
+
+    .tasks-icon {
+    background-color: #2196F3;
+    }
+
+    .pending-icon {
+    background-color: #FF9800;
+    }
+
+    .completed-icon {
+    background-color: #9C27B0;
+    }
+
+    .quick-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    }
+
+    .action-btn {
+    padding: 10px 15px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    }
+
+    .users-btn {
+    background-color: #4CAF50;
+    }
+
+    .tasks-btn {
+    background-color: #2196F3;
+    }
+
+    .categories-btn {
+    background-color: #FF9800;
+    }
+
+    .masquerade-btn {
+    background-color: #9C27B0;
+    }
+
+    .action-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+    }
+
+    @media (max-width: 768px) {
+    .dashboard-cards {
+    /* grid-template-columns: 1fr; */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .quick-actions {
+    flex-direction: column;
+    }
+
+    .action-btn {
+    width: 100%;
+    justify-content: center;
+    }
+    }
+    </style>`;
+
+    // Define any additional scripts specific to this page
+    const additionalScripts = `
+    <script>
+        // Any additional scripts for the admin dashboard can go here
+    </script>`;
+    %>
+
+    <%- include('../partials/admin-header', { title: title, user: user, activePage: activePage, additionalStyles:
+        additionalStyles, messages: messages }) %>
+
+        <div class="main-container">
+
+            <!-- Left Sidebar -->
+            <div class="leftside-nav">
+                <div class="nav-heading">
+                    <h5>Admin Panel</h5>
+                </div>
+                <ul type="none" class="leftside-nav-ul">
+                    <a href="/admin" class="active">
+                        <li><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                    </a>
+                    <a href="/admin/users">
+                        <li><i class="fas fa-users"></i> Users</li>
+                    </a>
+                    <a href="/tasks/admin/all">
+                        <li><i class="fas fa-tasks"></i> All Tasks</li>
+                    </a>
+                    <a href="/admin/categories">
+                        <li><i class="fas fa-tags"></i> Categories</li>
+                    </a>
+                    <% if (user.role==='superadmin' ) { %>
+                        <a href="/admin/masquerade">
+                            <li><i class="fas fa-user-secret"></i> Masquerade</li>
+                        </a>
+                        <% } %>
+                            <a href="/dashboard">
+                                <li><i class="fas fa-home"></i> Back to App</li>
+                            </a>
+                </ul>
+            </div>
+
+            <!-- Main Content Section -->
+            <div class="main-section">
+                <div class="upper-section">
+                    <div class="greeting-user-section">
+                        <h2 class="greeting-user">Admin Dashboard</h2>
+                        <span>
+                            Manage your application and users
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Dashboard Stats -->
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon users-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="card-title">Total Users</div>
+                        <div class="card-value">
+                            <%= userCount %>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon tasks-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                        </div>
+                        <div class="card-title">Total Tasks</div>
+                        <div class="card-value">
+                            <%= taskCount %>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon pending-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="card-title">Pending Tasks</div>
+                        <div class="card-value">
+                            <%= pendingTaskCount %>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon completed-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="card-title">Completed Tasks</div>
+                        <div class="card-value">
+                            <%= completedTaskCount %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions">
+                        <a href="/admin/users" class="action-btn users-btn">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                        <a href="/tasks/admin/all" class="action-btn tasks-btn">
+                            <i class="fas fa-tasks"></i> View All Tasks
+                        </a>
+                        <a href="/admin/categories" class="action-btn categories-btn">
+                            <i class="fas fa-tags"></i> Manage Categories
+                        </a>
+                        <% if (user.role==='superadmin' ) { %>
+                            <a href="/admin/masquerade" class="action-btn masquerade-btn">
+                                <i class="fas fa-user-secret"></i> Masquerade as User
+                            </a>
+                            <% } %>
+                    </div>
+                </div>
+            </div>
+
+
+            <%- include('../partials/admin-footer', { user: user, categories: categories || [], totalTasks: totalTasks
+                || 0, completedTasks: completedTasks || 0, categoryCounts: categoryCounts || {}, additionalScripts:
+                additionalScripts }) %>

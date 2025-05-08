@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Font family is now inherited from common.css */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .profile-image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4CAF50;
+        }
+
+        .image-upload-container {
+            margin-top: 10px;
+        }
+
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: pointer;
+            display: block;
+        }
+
+        .role-select {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li class="active"><a href="/admin/users"><i class="fas fa-users"></i> Users</a></li>
+                <% if (user.role==='superadmin' ) { %>
+                    <li><a href="/admin/masquerade"><i class="fas fa-user-secret"></i> Masquerade</a></li>
+                    <% } %>
+                        <li><a href="/tasks/admin/all"><i class="fas fa-tasks"></i> All Tasks</a></li>
+                        <li><a href="/dashboard"><i class="fas fa-home"></i> Back to App</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <% if (locals.isMasqueraded) { %>
+                <div class="masquerade-banner">
+                    <div>You are currently masquerading as <%= user.firstName %>
+                            <%= user.lastName %>
+                    </div>
+                    <a href="/admin/stop-masquerade">Stop Masquerading</a>
+                </div>
+                <% } %>
+
+                    <div class="header">
+                        <h1>Edit User Profile</h1>
+                        <div class="user-info">
+                            <img src="<%= editUser.profileImage || '/img/avatar.svg' %>" alt="User Avatar">
+                            <div>
+                                <div>
+                                    <%= user.firstName %>
+                                        <%= user.lastName %>
+                                </div>
+                                <div><small>
+                                        <%= user.role %>
+                                    </small></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <% if (messages.success) { %>
+                            <div class="alert alert-success"
+                                style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
+                                <%= messages.success %>
+                            </div>
+                            <% } %>
+
+                                <% if (messages.error) { %>
+                                    <div class="alert alert-danger"
+                                        style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
+                                        <%= messages.error %>
+                                    </div>
+                                    <% } %>
+
+                                        <form action="/admin/users/<%= editUser._id %>" method="POST"
+                                            enctype="multipart/form-data">
+                                            <div class="profile-image-container">
+                                                <img src="<%= editUser.profileImage || '/img/avatar.svg' %>"
+                                                    alt="Profile Image" class="profile-image" id="profile-preview">
+                                                <div class="image-upload-container">
+                                                    <span class="btn btn-primary btn-file">
+                                                        <i class="fas fa-upload"></i> Choose Image
+                                                        <input type="file" name="profileImage" id="profile-image-input"
+                                                            accept="image/*">
+                                                    </span>
+                                                    <small style="display: block; margin-top: 5px; color: #666;">Max
+                                                        file size: 5MB</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="firstName" class="form-label">First Name</label>
+                                                <input type="text" id="firstName" name="firstName" class="form-control"
+                                                    value="<%= editUser.firstName %>" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="lastName" class="form-label">Last Name</label>
+                                                <input type="text" id="lastName" name="lastName" class="form-control"
+                                                    value="<%= editUser.lastName %>" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" id="email" name="email" class="form-control"
+                                                    value="<%= editUser.email %>" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="role" class="form-label">Role</label>
+                                                <select id="role" name="role" class="role-select">
+                                                    <option value="guest" <%=editUser.role==='guest' ? 'selected' : ''
+                                                        %>>Guest</option>
+                                                    <option value="user" <%=editUser.role==='user' ? 'selected' : '' %>
+                                                        >User</option>
+                                                    <option value="admin" <%=editUser.role==='admin' ? 'selected' : ''
+                                                        %>>Admin</option>
+                                                    <% if (user.role==='superadmin' ) { %>
+                                                        <option value="superadmin" <%=editUser.role==='superadmin'
+                                                            ? 'selected' : '' %>>Superadmin</option>
+                                                        <% } %>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="password" class="form-label">New Password (leave blank to
+                                                    keep current)</label>
+                                                <input type="password" id="password" name="password"
+                                                    class="form-control">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                                    <i class="fas fa-save"></i> Save Changes
+                                                </button>
+                                            </div>
+                                        </form>
+                    </div>
+        </div>
+    </div>
+
+    <footer>
+        <span>@ Developed By Lokesh Chaudhary</span>
+    </footer>
+
+    <script>
+        // Preview the profile image before upload
+        document.getElementById('profile-image-input').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    document.getElementById('profile-preview').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+
+</html>

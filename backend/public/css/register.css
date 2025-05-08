@@ -40,7 +40,7 @@ html {
   -moz-tab-size: 4;
   /* 3 */
   -o-tab-size: 4;
-     tab-size: 4;
+  tab-size: 4;
   /* 3 */
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
@@ -54,9 +54,10 @@ html {
 body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #181a1b;
@@ -65,6 +66,9 @@ body {
   /* 1 */
   line-height: inherit;
   /* 2 */
+  padding-bottom: 40px;
+  /* Add padding for footer */
+  overflow-x: hidden;
 }
 
 /*
@@ -88,7 +92,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
 }
 
 /*
@@ -355,14 +359,16 @@ textarea {
 2. Set the default placeholder color to the user's configured gray 400 color.
 */
 
-input::-moz-placeholder, textarea::-moz-placeholder {
+input::-moz-placeholder,
+textarea::-moz-placeholder {
   opacity: 1;
   /* 1 */
   color: #9ca3af;
   /* 2 */
 }
 
-input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
   opacity: 1;
   /* 1 */
   color: #9ca3af;
@@ -432,7 +438,9 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: none;
 }
 
-*, ::before, ::after {
+*,
+::before,
+::after {
   --tw-translate-x: 0;
   --tw-translate-y: 0;
   --tw-rotate: 0;
@@ -440,16 +448,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
+  --tw-pan-x: ;
+  --tw-pan-y: ;
+  --tw-pinch-zoom: ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
+  --tw-ring-inset: ;
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -457,339 +465,346 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+  --tw-backdrop-blur: ;
+  --tw-backdrop-brightness: ;
+  --tw-backdrop-contrast: ;
+  --tw-backdrop-grayscale: ;
+  --tw-backdrop-hue-rotate: ;
+  --tw-backdrop-invert: ;
+  --tw-backdrop-opacity: ;
+  --tw-backdrop-saturate: ;
+  --tw-backdrop-sepia: ;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 body {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #181a1b;
-    font-family: 'Poppins', sans-serif;
-    color: #cfd1d0;
-    padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #181a1b;
+  font-family: 'Poppins', sans-serif;
+  color: #cfd1d0;
+  padding: 20px;
 }
 
 .register-container {
-    width: 100%;
-    max-width: 800px;
-    padding: 40px;
-    background-color: #1d2021;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 800px;
+  padding: 40px;
+  background-color: #1d2021;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  margin: 20px 0;
 }
 
 .register-title {
-    text-align: center;
-    margin-bottom: 10px;
-    color: #1d7b92;
-    font-size: 24px;
-    font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #1d7b92;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .subtitle {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #cfd1d0;
-    opacity: 0.7;
-    font-size: 14px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #cfd1d0;
+  opacity: 0.7;
+  font-size: 14px;
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
 }
 
 .form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .form-group label {
-    font-size: 14px;
-    color: #cfd1d0;
-    font-weight: 500;
+  font-size: 14px;
+  color: #cfd1d0;
+  font-weight: 500;
 }
 
 .form-group input,
 .form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #2a2e2f;
-    border-radius: 6px;
-    background-color: #242728;
-    color: #cfd1d0;
-    font-size: 14px;
-    font-family: inherit;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #2a2e2f;
+  border-radius: 6px;
+  background-color: #242728;
+  color: #cfd1d0;
+  font-size: 14px;
+  font-family: inherit;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    outline: none;
-    border-color: #1d7b92;
+  outline: none;
+  border-color: #1d7b92;
 }
 
 .form-group select {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 16px;
-    padding-right: 40px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
 }
 
 .password-input {
-    position: relative;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    color: #6c757d;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #6c757d;
 }
 
 .toggle-password:hover {
-    color: #1d7b92;
+  color: #1d7b92;
 }
 
 .error-message {
-    background-color: rgba(220, 38, 38, 0.1);
-    color: #ef4444;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    font-size: 14px;
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #ef4444;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 .register-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #1d7b92;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    transition: background-color 0.3s;
+  width: 100%;
+  padding: 12px;
+  background-color: #1d7b92;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s;
 }
 
 .register-btn:hover {
-    background-color: #165f70;
+  background-color: #165f70;
 }
 
 .login-link {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
 }
 
 .login-link a {
-    color: #1d7b92;
-    text-decoration: none;
-    font-weight: 500;
+  color: #1d7b92;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .login-link a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 @media screen and (min-width: 601px) and (max-width: 1024px) {
-    .register-container {
-        width: 90%;
-        max-width: 600px;
-        padding: 30px;
-    }
+  .register-container {
+    width: 90%;
+    max-width: 600px;
+    padding: 30px;
+  }
 
-    .register-title {
-        font-size: 22px;
-    }
+  .register-title {
+    font-size: 22px;
+  }
 
-    .form-row {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
+  .form-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 
-    .form-group input,
-    .form-group select {
-        padding: 10px;
-    }
+  .form-group input,
+  .form-group select {
+    padding: 10px;
+  }
 }
 
 @media screen and (max-width: 600px) {
-    body {
-        padding: 15px;
-        align-items: flex-start;
-    }
+  body {
+    padding: 15px;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
 
-    .register-container {
-        width: 100%;
-        padding: 20px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-    }
+  .register-container {
+    width: 100%;
+    padding: 20px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
 
-    .register-title {
-        font-size: 20px;
-        margin-bottom: 8px;
-    }
+  .register-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
 
-    .subtitle {
-        font-size: 13px;
-        margin-bottom: 20px;
-    }
+  .subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
 
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
 
-    .form-group {
-        gap: 6px;
-    }
+  .form-group {
+    gap: 6px;
+  }
 
-    .form-group label {
-        font-size: 13px;
-    }
+  .form-group label {
+    font-size: 13px;
+  }
 
-    .form-group input,
-    .form-group select {
-        padding: 10px;
-        font-size: 13px;
-    }
+  .form-group input,
+  .form-group select {
+    padding: 10px;
+    font-size: 13px;
+  }
 
-    .password-input .toggle-password {
-        right: 10px;
-        font-size: 14px;
-    }
+  .password-input .toggle-password {
+    right: 10px;
+    font-size: 14px;
+  }
 
-    .error-message {
-        padding: 10px;
-        font-size: 13px;
-        margin-bottom: 15px;
-    }
+  .error-message {
+    padding: 10px;
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
 
-    .register-btn {
-        padding: 12px;
-        font-size: 15px;
-    }
+  .register-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
 
-    .login-link {
-        font-size: 13px;
-        margin-top: 15px;
-    }
+  .login-link {
+    font-size: 13px;
+    margin-top: 15px;
+  }
 }
 
 @media screen and (max-width: 400px) {
-    body {
-        padding: 10px;
-    }
+  body {
+    padding: 10px;
+  }
 
-    .register-container {
-        padding: 15px;
-    }
+  .register-container {
+    padding: 15px;
+  }
 
-    .register-title {
-        font-size: 18px;
-    }
+  .register-title {
+    font-size: 18px;
+  }
 
-    .subtitle {
-        font-size: 12px;
-    }
+  .subtitle {
+    font-size: 12px;
+  }
 
-    .form-group label {
-        font-size: 12px;
-    }
+  .form-group label {
+    font-size: 12px;
+  }
 
-    .form-group input,
-    .form-group select {
-        padding: 8px;
-        font-size: 12px;
-    }
+  .form-group input,
+  .form-group select {
+    padding: 8px;
+    font-size: 12px;
+  }
 
-    .register-btn {
-        padding: 10px;
-        font-size: 14px;
-    }
+  .register-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
 
 @media screen and (max-width: 768px) {
-    body {
-        padding: 15px;
-    }
+  body {
+    padding: 15px;
+  }
 
-    .register-container {
-        padding: 30px 20px;
-    }
+  .register-container {
+    padding: 30px 20px;
+  }
 
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
 }
 
 @media screen and (max-width: 480px) {
-    .register-container {
-        padding: 20px 15px;
-    }
+  .register-container {
+    padding: 20px 15px;
+  }
 
-    .register-title {
-        font-size: 20px;
-    }
+  .register-title {
+    font-size: 20px;
+  }
 
-    .subtitle {
-        font-size: 13px;
-    }
+  .subtitle {
+    font-size: 13px;
+  }
 
-    .form-group label {
-        font-size: 13px;
-    }
+  .form-group label {
+    font-size: 13px;
+  }
 
-    .form-group input,
-    .form-group select {
-        padding: 10px;
-        font-size: 13px;
-    }
+  .form-group input,
+  .form-group select {
+    padding: 10px;
+    font-size: 13px;
+  }
 
-    .register-btn {
-        padding: 10px;
-        font-size: 15px;
-    }
+  .register-btn {
+    padding: 10px;
+    font-size: 15px;
+  }
 }
 
 .container {
@@ -823,6 +838,51 @@ form {
 @media (min-width: 1536px) {
   .container {
     max-width: 1536px;
+  }
+}
+
+/* Footer styles */
+footer {
+  width: 100%;
+  height: 2.5vh;
+  background-color: #121314;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #cfd1d0;
+  letter-spacing: 1px;
+}
+
+/* Additional responsive styles */
+@media screen and (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .register-container {
+    padding: 15px;
+  }
+
+  input,
+  select {
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    padding: 10px;
+  }
+
+  .note {
+    font-size: 12px;
   }
 }
 
@@ -918,8 +978,8 @@ form {
 
 .appearance-none {
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .grid-cols-1 {
@@ -950,37 +1010,37 @@ form {
   gap: 0.5rem;
 }
 
-.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+.space-y-4> :not([hidden])~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
 
-.space-x-2 > :not([hidden]) ~ :not([hidden]) {
+.space-x-2> :not([hidden])~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
   margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-x-3 > :not([hidden]) ~ :not([hidden]) {
+.space-x-3> :not([hidden])~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.75rem * var(--tw-space-x-reverse));
   margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-x-4 > :not([hidden]) ~ :not([hidden]) {
+.space-x-4> :not([hidden])~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
   margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-x-1 > :not([hidden]) ~ :not([hidden]) {
+.space-x-1> :not([hidden])~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.25rem * var(--tw-space-x-reverse));
   margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+.space-y-2> :not([hidden])~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
@@ -1197,7 +1257,7 @@ form {
 .backdrop-blur-lg {
   --tw-backdrop-blur: blur(16px);
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-          backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
 .transition {

@@ -10,15 +10,16 @@ services:
     volumes:
       - ./backend:/app/backend
       - /app/backend/node_modules
+      - uploads-data:/app/backend/public/uploads
     ports:
       - "5000:5000"
     command: >
       bash -c "
-        npm install && 
-        if [ \"$$NODE_ENV\" = \"production\" ]; then 
-          npm run prod; 
-        else 
-          npm start; 
+        npm install &&
+        if [ \"$$NODE_ENV\" = \"production\" ]; then
+          npm run prod;
+        else
+          npm start;
         fi
       "
     depends_on:
@@ -38,3 +39,4 @@ services:
 
 volumes:
   mongo-data:
+  uploads-data:

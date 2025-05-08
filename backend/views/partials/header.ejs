@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/nav-fix.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/7692/7692809.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <% if (typeof additionalStyles !== 'undefined') { %>
+        <%- additionalStyles %>
+    <% } %>
+    <style>
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .flash-message {
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .flash-success {
+            background-color: #4CAF50;
+        }
+
+        .flash-error {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    <% if (messages && messages.success && messages.success.length > 0) { %>
+        <div class="flash-messages">
+            <div class="flash-message flash-success">
+                <%= messages.success %>
+            </div>
+        </div>
+    <% } %>
+    <% if (messages && messages.error && messages.error.length > 0) { %>
+        <div class="flash-messages">
+            <div class="flash-message flash-error">
+                <%= messages.error %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Masquerade Banner -->
+    <% if (locals.isMasqueraded) { %>
+        <div class="masquerade-banner">
+            <div>You are currently masquerading as <%= user.firstName %> <%= user.lastName %></div>
+            <a href="/admin/stop-masquerade">Stop Masquerading</a>
+        </div>
+    <% } %>
+
+    <!-- Navigation Bar -->
+    <%- include('navbar.ejs', { user: user, path: '/' + activePage }) %>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="leftside-nav">
+            <div class="nav-heading">
+                <h5>Collection</h5>
+            </div>
+            <ul type="none" class="leftside-nav-ul">
+                <a href="/tasks/pending" class="<%= activePage === 'pending-tasks' ? 'active' : '' %>">
+                    <li><i class="fas fa-clock"></i> Pending Tasks</li>
+                </a>
+                <a href="/tasks/completed" class="<%= activePage === 'completed-tasks' ? 'active' : '' %>">
+                    <li><i class="fas fa-check-circle"></i> Completed Tasks</li>
+                </a>
+                <a href="/tasks" class="<%= activePage === 'all-tasks' ? 'active' : '' %>">
+                    <li><i class="fas fa-list"></i> All Tasks</li>
+                </a>
+                <!-- <a href="/tasks/forms" class="<%= activePage === 'task-forms' ? 'active' : '' %>">
+                    <li><i class="fas fa-plus-square"></i> Quick Add Forms</li>
+                </a> -->
+                <a href="/categories" class="<%= activePage === 'categories' ? 'active' : '' %>">
+                    <li><i class="fas fa-tag"></i> Categories</li>
+                </a>
+            </ul>
+        </div>

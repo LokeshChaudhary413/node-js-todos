@@ -1,0 +1,19 @@
+<div class="nav-container">
+    <div class="nav">
+        <div class="logo">
+            <a href="/dashboard">
+                <img src="https://cdn-icons-png.flaticon.com/512/7692/7692809.png" alt="Todo Logo">
+            </a>
+        </div>
+        <div class="nav-links">
+            <ul>
+                <li><a href="/dashboard" class="<%= path === '/dashboard' ? 'active' : '' %>">Dashboard</a></li>
+                <li><a href="/profile" class="<%= path === '/profile' ? 'active' : '' %>">Profile</a></li>
+                <% if (user && (user.role === 'admin' || user.role === 'superadmin')) { %>
+                    <li><a href="/admin" class="<%= path.startsWith('/admin') ? 'active' : '' %>">Admin</a></li>
+                <% } %>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

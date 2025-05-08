@@ -1,0 +1,352 @@
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s;
+}
+
+/* For backward compatibility with existing code */
+#add-task-section {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    position: relative;
+    background-color: #1d2021;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 600px;
+    animation: slideDown 0.3s;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #cfd1d0;
+    font-size: 1.5rem;
+}
+
+.close-add-task-section,
+.close-category-modal {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-add-task-section:hover,
+.close-category-modal:hover {
+    color: #fff;
+}
+
+/* Form Styles */
+.input-field {
+    margin-bottom: 20px;
+}
+
+.input-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #cfd1d0;
+    font-size: 0.9rem;
+}
+
+.input-task,
+.input-field input[type="text"],
+.input-field input[type="color"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #121314;
+    color: #cfd1d0;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.input-field textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #121314;
+    color: #cfd1d0;
+    font-size: 1rem;
+    min-height: 100px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.input-field input:focus,
+.input-field textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+/* Category Section */
+.category-section {
+    margin-bottom: 20px;
+}
+
+.category-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.category-heading h5 {
+    margin: 0;
+    color: #cfd1d0;
+    font-size: 1rem;
+}
+
+.btn-add-category {
+    background-color: transparent;
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-add-category:hover {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.add-task-category-main-section {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.add-task-category-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+}
+
+.category {
+    width: auto;
+    height: auto;
+    background-color: #20212b;
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 5px 5px 10px rgb(19, 19, 19);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.category:hover {
+    transform: scale(1.05);
+}
+
+.category.selected {
+    background-color: #1d1d23;
+    transform: scale(1.1);
+    border: 1px solid #4CAF50;
+}
+
+.category img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.category span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #cfd1d0;
+    text-align: center;
+}
+
+.loading-categories {
+    color: #777;
+    font-style: italic;
+    padding: 10px;
+    grid-column: span 2;
+    text-align: center;
+}
+
+/* Date and Time Section */
+.date-time-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.date-field,
+.time-field {
+    flex: 1;
+}
+
+.date-field label,
+.time-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #cfd1d0;
+    font-size: 0.9rem;
+}
+
+.input-date,
+.input-time {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #121314;
+    color: #cfd1d0;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+.add-task-btn,
+.add-category-btn {
+    text-align: center;
+}
+
+.add-new-task,
+.add-new-category {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    max-width: 300px;
+}
+
+.add-new-task:hover,
+.add-new-category:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .modal-content {
+        margin: 15% auto;
+        width: 95%;
+        padding: 15px;
+    }
+
+    .date-time-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .add-task-category-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .category {
+        padding: 10px;
+    }
+
+    .category img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .category span {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal-content {
+        margin: 20% auto;
+        padding: 10px;
+    }
+
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+
+    .add-task-category-section {
+        grid-template-columns: 1fr;
+    }
+
+    .category {
+        padding: 8px;
+    }
+
+    .category img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .input-task,
+    .input-field input[type="text"],
+    .input-field textarea,
+    .input-date,
+    .input-time {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .add-new-task,
+    .add-new-category {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}

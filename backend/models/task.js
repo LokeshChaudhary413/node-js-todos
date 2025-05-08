@@ -24,7 +24,7 @@ const taskSchema = mongoose.Schema({
         type: String,
         default: currentTime
     },
-    currentDate: { 
+    currentDate: {
         type: String,
         default: currentDate
     },
@@ -36,8 +36,7 @@ const taskSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
-        default: true
+        required: true
     },
     date: {
         type: String,
@@ -50,6 +49,16 @@ const taskSchema = mongoose.Schema({
     categoryChoosed: {
         type: String,
         required: true
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: false
+    },
+    accessLevel: {
+        type: String,
+        enum: ['private', 'public'],
+        default: 'private'
     },
     completed: {
         type: Boolean,

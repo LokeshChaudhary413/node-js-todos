@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Category Management Styles */
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .category-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-list th,
+        .category-list td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .category-list th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .category-list tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .category-color-preview {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .category-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            color: white;
+        }
+
+        .edit-btn {
+            background-color: #FFC107;
+            color: #333;
+        }
+
+        .delete-btn {
+            background-color: #F44336;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .default-badge {
+            background-color: #e0e0e0;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="/admin/users"><i class="fas fa-users"></i> Users</a></li>
+                <% if (user.role === 'superadmin') { %>
+                    <li><a href="/admin/masquerade"><i class="fas fa-user-secret"></i> Masquerade</a></li>
+                <% } %>
+                <li><a href="/tasks/admin/all"><i class="fas fa-tasks"></i> All Tasks</a></li>
+                <li class="active"><a href="/admin/categories"><i class="fas fa-tags"></i> Categories</a></li>
+                <li><a href="/dashboard"><i class="fas fa-home"></i> Back to App</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="category-header">
+                <h1>Category Management</h1>
+                <button id="add-category-btn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add New Category
+                </button>
+            </div>
+
+            <!-- Flash Messages -->
+            <% if (messages.success && messages.success.length > 0) { %>
+                <div class="flash-messages">
+                    <div class="flash-message flash-success">
+                        <%= messages.success %>
+                    </div>
+                </div>
+            <% } %>
+            <% if (messages.error && messages.error.length > 0) { %>
+                <div class="flash-messages">
+                    <div class="flash-message flash-error">
+                        <%= messages.error %>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Categories Table -->
+            <table class="category-list">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Icon</th>
+                        <th>Color</th>
+                        <th>Users</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (categories && categories.length > 0) { %>
+                        <% categories.forEach(function(category) { %>
+                            <tr>
+                                <td><%= category.name %></td>
+                                <td>
+                                    <img src="<%= category.icon %>" alt="<%= category.name %>" class="category-icon">
+                                </td>
+                                <td>
+                                    <span class="category-color-preview" style="background-color: <%= category.color %>"></span>
+                                    <%= category.color %>
+                                </td>
+                                <td>
+                                    <% if (category.users && category.users.length > 0) { %>
+                                        <% const displayUsers = category.users.slice(0, 2); %>
+                                        <% displayUsers.forEach((user, index) => { %>
+                                            <%= user.firstName %> <%= user.lastName %><%= index < displayUsers.length - 1 ? ', ' : '' %>
+                                        <% }); %>
+                                        <% if (category.users.length > 2) { %>
+                                            and <%= category.users.length - 2 %> more
+                                        <% } %>
+                                        <button class="action-btn edit-btn" style="margin-left: 5px;" onclick="openAssignModal('<%= category._id %>')">
+                                            <i class="fas fa-user-plus"></i>
+                                        </button>
+                                    <% } else { %>
+                                        No Users
+                                        <button class="action-btn edit-btn" style="margin-left: 5px;" onclick="openAssignModal('<%= category._id %>')">
+                                            <i class="fas fa-user-plus"></i>
+                                        </button>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (category.isDefault) { %>
+                                        <span class="default-badge">Default</span>
+                                    <% } else { %>
+                                        Custom
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <button class="action-btn edit-btn" onclick="openEditModal('<%= category._id %>', '<%= category.name %>', '<%= category.icon %>', '<%= category.color %>', <%= category.isDefault %>)">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <% if (!category.isDefault) { %>
+                                        <button class="action-btn delete-btn" onclick="confirmDelete('<%= category._id %>', '<%= category.name %>')">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" style="text-align: center;">No categories found</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div id="add-category-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Category</h2>
+            <form id="add-category-form" action="/admin/categories" method="POST">
+                <div class="form-group">
+                    <label for="name">Category Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="icon">Icon URL</label>
+                    <input type="text" id="icon" name="icon" placeholder="https://example.com/icon.png">
+                </div>
+                <div class="form-group">
+                    <label for="color">Color</label>
+                    <input type="color" id="color" name="color" value="#4CAF50">
+                </div>
+                <div class="form-group">
+                    <label for="users">Assign to Users</label>
+                    <select id="users" name="users" multiple required style="height: 120px;">
+                        <% users.forEach(function(user) { %>
+                            <option value="<%= user._id %>"><%= user.firstName %> <%= user.lastName %> (<%= user.email %>)</option>
+                        <% }); %>
+                    </select>
+                    <small>Hold Ctrl/Cmd to select multiple users</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Category Modal -->
+    <div id="edit-category-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Category</h2>
+            <form id="edit-category-form" action="/admin/categories/" method="POST">
+                <input type="hidden" id="edit-category-id" name="id">
+                <div class="form-group">
+                    <label for="edit-name">Category Name</label>
+                    <input type="text" id="edit-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-icon">Icon URL</label>
+                    <input type="text" id="edit-icon" name="icon" placeholder="https://example.com/icon.png">
+                </div>
+                <div class="form-group">
+                    <label for="edit-color">Color</label>
+                    <input type="color" id="edit-color" name="color">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to delete the category "<span id="delete-category-name"></span>"?</p>
+            <p>This action cannot be undone. Tasks using this category will be reassigned to the "Others" category.</p>
+            <form id="delete-category-form" action="/admin/categories/" method="POST">
+                <input type="hidden" id="delete-category-id" name="id">
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #F44336;">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assign Users Modal -->
+    <div id="assign-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Assign Users to Category</h2>
+            <form id="assign-category-form" action="/admin/categories/" method="POST">
+                <input type="hidden" id="assign-category-id" name="id">
+                <div class="form-group">
+                    <label for="assign-users">Select Users</label>
+                    <select id="assign-users" name="users[]" multiple required style="height: 150px;">
+                        <% users.forEach(function(user) { %>
+                            <option value="<%= user._id %>"><%= user.firstName %> <%= user.lastName %> (<%= user.email %>)</option>
+                        <% }); %>
+                    </select>
+                    <small>Hold Ctrl/Cmd to select multiple users</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAssignModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign Users</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const addModal = document.getElementById('add-category-modal');
+        const editModal = document.getElementById('edit-category-modal');
+        const deleteModal = document.getElementById('delete-modal');
+        const assignModal = document.getElementById('assign-modal');
+        const addBtn = document.getElementById('add-category-btn');
+        const closeBtns = document.getElementsByClassName('close');
+
+        // Open add modal
+        addBtn.onclick = function() {
+            addModal.style.display = 'block';
+        }
+
+        // Close modals when clicking on X
+        for (let i = 0; i < closeBtns.length; i++) {
+            closeBtns[i].onclick = function() {
+                addModal.style.display = 'none';
+                editModal.style.display = 'none';
+                deleteModal.style.display = 'none';
+                assignModal.style.display = 'none';
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target == addModal) {
+                addModal.style.display = 'none';
+            } else if (event.target == editModal) {
+                editModal.style.display = 'none';
+            } else if (event.target == deleteModal) {
+                deleteModal.style.display = 'none';
+            } else if (event.target == assignModal) {
+                assignModal.style.display = 'none';
+            }
+        }
+
+        // Close add modal
+        function closeAddModal() {
+            addModal.style.display = 'none';
+        }
+
+        // Open edit modal with category data
+        function openEditModal(id, name, icon, color, isDefault) {
+            document.getElementById('edit-category-id').value = id;
+            document.getElementById('edit-name').value = name;
+            document.getElementById('edit-icon').value = icon;
+            document.getElementById('edit-color').value = color;
+
+            // Update form action
+            document.getElementById('edit-category-form').action = `/admin/categories/${id}/update`;
+
+            // Disable name field for default categories
+            if (isDefault) {
+                document.getElementById('edit-name').disabled = true;
+            } else {
+                document.getElementById('edit-name').disabled = false;
+            }
+
+            editModal.style.display = 'block';
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            editModal.style.display = 'none';
+        }
+
+        // Open delete confirmation modal
+        function confirmDelete(id, name) {
+            document.getElementById('delete-category-id').value = id;
+            document.getElementById('delete-category-name').textContent = name;
+
+            // Update form action
+            document.getElementById('delete-category-form').action = `/admin/categories/${id}/delete`;
+
+            deleteModal.style.display = 'block';
+        }
+
+        // Close delete modal
+        function closeDeleteModal() {
+            deleteModal.style.display = 'none';
+        }
+
+        // Open assign modal
+        function openAssignModal(id) {
+            document.getElementById('assign-category-id').value = id;
+
+            // Update form action
+            document.getElementById('assign-category-form').action = `/admin/categories/${id}/assign`;
+
+            assignModal.style.display = 'block';
+        }
+
+        // Close assign modal
+        function closeAssignModal() {
+            assignModal.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

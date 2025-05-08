@@ -1,0 +1,81 @@
+/* Common styles for consistent font usage across the application */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-font: 'Poppins', sans-serif;
+  --heading-size-large: 2rem;
+  --heading-size-medium: 1.5rem;
+  --heading-size-small: 1.2rem;
+  --text-size-large: 1rem;
+  --text-size-medium: 0.9rem;
+  --text-size-small: 0.8rem;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --letter-spacing: 0.5px;
+}
+
+body {
+  font-family: var(--primary-font);
+  letter-spacing: var(--letter-spacing);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--primary-font);
+  font-weight: var(--font-weight-semibold);
+}
+
+h1 {
+  font-size: var(--heading-size-large);
+}
+
+h2 {
+  font-size: var(--heading-size-medium);
+}
+
+h3, h4, h5 {
+  font-size: var(--heading-size-small);
+}
+
+p, span, div, button, input, textarea, select {
+  font-family: var(--primary-font);
+}
+
+button, input[type="submit"] {
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+.text-large {
+  font-size: var(--text-size-large);
+}
+
+.text-medium {
+  font-size: var(--text-size-medium);
+}
+
+.text-small {
+  font-size: var(--text-size-small);
+}
+
+.font-light {
+  font-weight: var(--font-weight-light);
+}
+
+.font-regular {
+  font-weight: var(--font-weight-regular);
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+
+.font-bold {
+  font-weight: var(--font-weight-bold);
+}

@@ -1,67 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/register.css">
     <title>Register - Todo App</title>
 </head>
+
 <body>
     <div class="register-container">
         <h1 class="register-title">Create Account</h1>
-        <p class="subtitle">Please fill in your details</p>
+        <p class="subtitle">Please fill in your basic details</p>
+        <p class="note" style="text-align: center; margin-bottom: 20px; font-size: 13px; color: #999; max-width: 100%;">
+            Note: Additional profile information can be updated by an admin after registration.</p>
+
+        <% if (typeof error !=='undefined' ) { %>
+            <div class="error-message"
+                style="background-color: #ffebee; color: #d32f2f; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+                <%= error %>
+            </div>
+        <% } %>
 
         <form action="/register" method="POST">
             <div class="form-row">
                 <div class="form-group">
                     <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
+                    <input type="text" id="firstName" name="firstName" required
+                        placeholder="Enter your first name"
+                        value="<%= typeof formData !== 'undefined' && formData.firstName ? formData.firstName : '' %>">
                 </div>
 
                 <div class="form-group">
                     <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name">
+                    <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name"
+                        value="<%= typeof formData !== 'undefined' && formData.lastName ? formData.lastName : '' %>">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <input type="email" id="email" name="email" required placeholder="Enter your email"
+                    value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>">
             </div>
 
             <div class="form-group">
                 <label for="phone">Phone</label>
-                <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                <input type="tel" id="phone" name="phone" required
+                    placeholder="Enter your phone number (e.g., +1234567890)" pattern="^\+?[0-9]{7,15}$"
+                    title="Phone number must be between 7-15 digits and may start with a + sign">
+                <small class="form-text" style="color: #999; font-size: 12px; margin-top: 5px;">Format:
+                    +1234567890 or
+                    1234567890 (7-15 digits)</small>
             </div>
 
-            <div class="form-group">
-                <label for="phone">City</label>
-                <input type="text" id="city" name="city" required placeholder="Enter your city">
-            </div>
+            <!-- Hidden fields with default values -->
+            <input type="hidden" id="city" name="city" value="Default City">
+            <input type="hidden" id="state" name="state" value="Default State">
+            <input type="hidden" id="country" name="country" value="Default Country">
+            <input type="hidden" id="DOB" name="dob" value="2000-01-01">
+            <input type="hidden" id="zipcode" name="zipcode" value="00000">
 
             <div class="form-group">
-                <label for="phone">State</label>
-                <input type="text" id="state" name="state" required placeholder="Enter your State">
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Country</label>
-                <input type="text" id="country" name="country" required placeholder="Enter your Country">
-            </div>
-
-            <div class="form-group">
-                <label for="phone">DOB</label>
-                <input type="date" id="DOB" name="dob" required>
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Zip</label>
-                <input type="number" id="zipcode" name="zipcode" required placeholder="Enter your zip number">
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Address</label>
-                <input type="text" id="zip" name="address" required placeholder="Enter your Address">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" required placeholder="Enter your Address">
             </div>
 
             <div class="form-group">
@@ -77,9 +80,12 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <div class="password-input">
-                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    <input type="password" id="password" name="password" required
+                        placeholder="Enter your password">
                     <button type="button" class="toggle-password" onclick="togglePassword('password')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
@@ -90,26 +96,29 @@
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
                 <div class="password-input">
-                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                    <input type="password" id="confirmPassword" name="confirmPassword" required
+                        placeholder="Confirm your password">
                     <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                     </button>
                 </div>
             </div>
-            <% if (typeof error !== "undefined" && error.length > 0) { %>
+            <% if (typeof error !=="undefined" && error.length> 0) { %>
                 <div class="error-message">
                     <%= error %>
                 </div>
-            <% } %>
+                <% } %>
 
-            <button type="submit" class="register-btn">Create Account</button>
+                    <button type="submit" class="register-btn">Create Account</button>
 
-            <div class="login-link">
-                Already have an account? <a href="/login">Login</a>
-            </div>
+                    <div class="login-link">
+                        Already have an account? <a href="/login">Login</a>
+                    </div>
         </form>
     </div>
 
@@ -117,7 +126,7 @@
         function togglePassword(inputId) {
             const passwordInput = document.getElementById(inputId);
             const toggleBtn = passwordInput.parentElement.querySelector('.toggle-password');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleBtn.classList.add('show');
@@ -126,6 +135,52 @@
                 toggleBtn.classList.remove('show');
             }
         }
+
+        // Phone validation
+        document.addEventListener('DOMContentLoaded', function () {
+            const phoneInput = document.getElementById('phone');
+            const phoneRegex = /^\+?[0-9]{7,15}$/;
+
+            // Create error message element
+            const errorMessage = document.createElement('div');
+            errorMessage.style.color = '#ff4d4d';
+            errorMessage.style.fontSize = '12px';
+            errorMessage.style.marginTop = '5px';
+            errorMessage.style.display = 'none';
+            phoneInput.parentNode.appendChild(errorMessage);
+
+            // Validate on input
+            phoneInput.addEventListener('input', function () {
+                const isValid = phoneRegex.test(phoneInput.value);
+
+                if (!isValid && phoneInput.value.length > 0) {
+                    errorMessage.textContent = 'Please enter a valid phone number (7-15 digits, may start with +)';
+                    errorMessage.style.display = 'block';
+                    phoneInput.style.borderColor = '#ff4d4d';
+                } else {
+                    errorMessage.style.display = 'none';
+                    phoneInput.style.borderColor = '';
+                }
+            });
+
+            // Validate on form submission
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (event) {
+                const isValid = phoneRegex.test(phoneInput.value);
+
+                if (!isValid) {
+                    event.preventDefault();
+                    errorMessage.textContent = 'Please enter a valid phone number (7-15 digits, may start with +)';
+                    errorMessage.style.display = 'block';
+                    phoneInput.style.borderColor = '#ff4d4d';
+                    phoneInput.focus();
+                }
+            });
+        });
     </script>
+    <footer>
+        <span>@ Developed By Lokesh Chaudhary</span>
+    </footer>
 </body>
+
 </html>

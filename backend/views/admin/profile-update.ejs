@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Font family is now inherited from common.css */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .right-sidebar {
+            width: 350px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-left: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4CAF50;
+        }
+
+        .profile-image-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .profile-image-upload input {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 14px;
+        }
+
+        .btn-update {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn-update:hover {
+            background-color: #45a049;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .user-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .user-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-card-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .user-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-info-item {
+            display: flex;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .user-info-label {
+            width: 120px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .user-info-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .badge-role {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .role-user {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .role-admin {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .role-superadmin {
+            background-color: #F44336;
+            color: white;
+        }
+
+        .role-guest {
+            background-color: #9E9E9E;
+            color: white;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .right-sidebar {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li class="active"><a href="/admin/users"><i class="fas fa-users"></i> Users</a></li>
+                <% if (user.role==='superadmin' ) { %>
+                    <li><a href="/admin/masquerade"><i class="fas fa-user-secret"></i> Masquerade</a></li>
+                    <% } %>
+                        <li><a href="/tasks/admin/all"><i class="fas fa-tasks"></i> All Tasks</a></li>
+                        <li><a href="/dashboard"><i class="fas fa-home"></i> Back to App</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="content-area">
+                <% if (locals.isMasqueraded) { %>
+                    <div class="masquerade-banner">
+                        <div>You are currently masquerading as <%= user.firstName %>
+                                <%= user.lastName %>
+                        </div>
+                        <a href="/admin/stop-masquerade">Stop Masquerading</a>
+                    </div>
+                    <% } %>
+
+                        <div class="header">
+                            <h1>User Management</h1>
+                            <div class="user-info">
+                                <img src="<%= user.profileImage || '/img/avatar.svg' %>" alt="User Avatar">
+                                <div>
+                                    <div>
+                                        <%= user.firstName %>
+                                            <%= user.lastName %>
+                                    </div>
+                                    <div><small>
+                                            <%= user.role %>
+                                        </small></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="user-card">
+                            <div class="user-card-header">
+                                <div>
+                                    <div class="user-card-title">User Details</div>
+                                    <div class="user-card-subtitle">Basic information about the selected user</div>
+                                </div>
+                                <div>
+                                    <span class="badge-role role-<%= selectedUser.role.toLowerCase() %>">
+                                        <%= selectedUser.role %>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <ul class="user-info-list">
+                                <li class="user-info-item">
+                                    <div class="user-info-label">Full Name</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.firstName %>
+                                            <%= selectedUser.lastName %>
+                                    </div>
+                                </li>
+                                <li class="user-info-item">
+                                    <div class="user-info-label">Email</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.email %>
+                                    </div>
+                                </li>
+                                <li class="user-info-item">
+                                    <div class="user-info-label">Phone</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.phone %>
+                                    </div>
+                                </li>
+                                <li class="user-info-item">
+                                    <div class="user-info-label">Gender</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.gender %>
+                                    </div>
+                                </li>
+                                <li class="user-info-item">
+                                    <div class="user-info-label">Date of Birth</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.dob %>
+                                    </div>
+                                </li>
+                                <li class="user-info-item">
+                                    <div class="user-info-label">Address</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.address || 'Not provided' %>
+                                    </div>
+                                </li>
+                                <li class="user-info-item">
+                                    <div class="user-info-label">City</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.city || 'Not provided' %>
+                                    </div>
+                                </li>
+                                <li class="user-info-item">
+                                    <div class="user-info-label">Zip Code</div>
+                                    <div class="user-info-value">
+                                        <%= selectedUser.zipcode || 'Not provided' %>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+            </div>
+
+            <div class="right-sidebar">
+                <% if (messages.success) { %>
+                    <div class="alert alert-success">
+                        <%= messages.success %>
+                    </div>
+                    <% } %>
+
+                        <% if (messages.error) { %>
+                            <div class="alert alert-danger">
+                                <%= messages.error %>
+                            </div>
+                            <% } %>
+
+                                <div class="profile-header">
+                                    <div class="profile-image-container">
+                                        <img src="<%= selectedUser.profileImage || '/img/avatar.svg' %>"
+                                            alt="Profile Image" class="profile-image" id="profile-preview">
+                                        <label class="profile-image-upload" for="profile-image-input">
+                                            <i class="fas fa-camera"></i>
+                                            <input type="file" id="profile-image-input" accept="image/*"
+                                                form="profile-form" name="profileImage">
+                                        </label>
+                                    </div>
+                                    <h3>
+                                        <%= selectedUser.firstName %>
+                                            <%= selectedUser.lastName %>
+                                    </h3>
+                                    <p>
+                                        <%= selectedUser.email %>
+                                    </p>
+                                </div>
+
+                                <form id="profile-form" action="/admin/users/<%= selectedUser._id %>/profile"
+                                    method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label class="form-label" for="firstName">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName"
+                                            value="<%= selectedUser.firstName %>" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName"
+                                            value="<%= selectedUser.lastName %>" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            value="<%= selectedUser.email %>" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="phone">Phone</label>
+                                        <input type="tel" class="form-control" id="phone" name="phone"
+                                            value="<%= selectedUser.phone %>" required pattern="^\+?[0-9]{7,15}$">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="gender">Gender</label>
+                                        <select class="form-select" id="gender" name="gender" required>
+                                            <option value="Male" <%=selectedUser.gender==='Male' ? 'selected' : '' %>
+                                                >Male</option>
+                                            <option value="Female" <%=selectedUser.gender==='Female' ? 'selected' : ''
+                                                %>>Female</option>
+                                            <option value="Other" <%=selectedUser.gender==='Other' ? 'selected' : '' %>
+                                                >Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="dob">Date of Birth</label>
+                                        <input type="date" class="form-control" id="dob" name="dob"
+                                            value="<%= selectedUser.dob %>" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="address">Address</label>
+                                        <input type="text" class="form-control" id="address" name="address"
+                                            value="<%= selectedUser.address || '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="city">City</label>
+                                        <input type="text" class="form-control" id="city" name="city"
+                                            value="<%= selectedUser.city || '' %>">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="zipcode">Zip Code</label>
+                                        <input type="text" class="form-control" id="zipcode" name="zipcode"
+                                            value="<%= selectedUser.zipcode || '' %>" pattern="^\d{5}(-\d{4})?$">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="role">Role</label>
+                                        <select class="form-select" id="role" name="role" required>
+                                            <option value="guest" <%=selectedUser.role==='guest' ? 'selected' : '' %>
+                                                >Guest</option>
+                                            <option value="user" <%=selectedUser.role==='user' ? 'selected' : '' %>>User
+                                            </option>
+                                            <option value="admin" <%=selectedUser.role==='admin' ? 'selected' : '' %>
+                                                >Admin</option>
+                                            <% if (user.role==='superadmin' ) { %>
+                                                <option value="superadmin" <%=selectedUser.role==='superadmin'
+                                                    ? 'selected' : '' %>>Superadmin</option>
+                                                <% } %>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="password">New Password (leave blank to keep
+                                            current)</label>
+                                        <input type="password" class="form-control" id="password" name="password">
+                                    </div>
+
+                                    <button type="submit" class="btn-update">
+                                        <i class="fas fa-save"></i> Update Profile
+                                    </button>
+                                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <span>@ Developed By Lokesh Chaudhary</span>
+    </footer>
+
+    <script>
+        // Preview the profile image before upload
+        document.getElementById('profile-image-input').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    document.getElementById('profile-preview').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+
+</html>
