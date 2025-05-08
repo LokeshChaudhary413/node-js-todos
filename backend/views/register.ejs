@@ -16,13 +16,6 @@
         <p class="note" style="text-align: center; margin-bottom: 20px; font-size: 13px; color: #999; max-width: 100%;">
             Note: Additional profile information can be updated by an admin after registration.</p>
 
-        <% if (typeof error !=='undefined' ) { %>
-            <div class="error-message"
-                style="background-color: #ffebee; color: #d32f2f; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
-                <%= error %>
-            </div>
-        <% } %>
-
         <form action="/register" method="POST">
             <div class="form-row">
                 <div class="form-group">
@@ -45,37 +38,6 @@
                     value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>">
             </div>
 
-            <div class="form-group">
-                <label for="phone">Phone</label>
-                <input type="tel" id="phone" name="phone" required
-                    placeholder="Enter your phone number (e.g., +1234567890)" pattern="^\+?[0-9]{7,15}$"
-                    title="Phone number must be between 7-15 digits and may start with a + sign">
-                <small class="form-text" style="color: #999; font-size: 12px; margin-top: 5px;">Format:
-                    +1234567890 or
-                    1234567890 (7-15 digits)</small>
-            </div>
-
-            <!-- Hidden fields with default values -->
-            <input type="hidden" id="city" name="city" value="Default City">
-            <input type="hidden" id="state" name="state" value="Default State">
-            <input type="hidden" id="country" name="country" value="Default Country">
-            <input type="hidden" id="DOB" name="dob" value="2000-01-01">
-            <input type="hidden" id="zipcode" name="zipcode" value="00000">
-
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" required placeholder="Enter your Address">
-            </div>
-
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <select id="gender" name="gender" required>
-                    <option value="">Select gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
@@ -109,16 +71,16 @@
                 </div>
             </div>
             <% if (typeof error !=="undefined" && error.length> 0) { %>
-                <div class="error-message">
+                <div class="error-message" style="background-color: #583737; color: white; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
                     <%= error %>
                 </div>
-                <% } %>
+            <% } %>
 
-                    <button type="submit" class="register-btn">Create Account</button>
+            <button type="submit" class="register-btn">Create Account</button>
 
-                    <div class="login-link">
-                        Already have an account? <a href="/login">Login</a>
-                    </div>
+            <div class="login-link">
+                Already have an account? <a href="/login">Login</a>
+            </div>
         </form>
     </div>
 
@@ -137,46 +99,46 @@
         }
 
         // Phone validation
-        document.addEventListener('DOMContentLoaded', function () {
-            const phoneInput = document.getElementById('phone');
-            const phoneRegex = /^\+?[0-9]{7,15}$/;
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const phoneInput = document.getElementById('phone');
+        //     const phoneRegex = /^\+?[0-9]{7,15}$/;
 
-            // Create error message element
-            const errorMessage = document.createElement('div');
-            errorMessage.style.color = '#ff4d4d';
-            errorMessage.style.fontSize = '12px';
-            errorMessage.style.marginTop = '5px';
-            errorMessage.style.display = 'none';
-            phoneInput.parentNode.appendChild(errorMessage);
+        //     // Create error message element
+        //     const errorMessage = document.createElement('div');
+        //     errorMessage.style.color = '#ff4d4d';
+        //     errorMessage.style.fontSize = '12px';
+        //     errorMessage.style.marginTop = '5px';
+        //     errorMessage.style.display = 'none';
+            // phoneInput.parentNode.appendChild(errorMessage);
 
             // Validate on input
-            phoneInput.addEventListener('input', function () {
-                const isValid = phoneRegex.test(phoneInput.value);
+            // phoneInput.addEventListener('input', function () {
+            //     const isValid = phoneRegex.test(phoneInput.value);
 
-                if (!isValid && phoneInput.value.length > 0) {
-                    errorMessage.textContent = 'Please enter a valid phone number (7-15 digits, may start with +)';
-                    errorMessage.style.display = 'block';
-                    phoneInput.style.borderColor = '#ff4d4d';
-                } else {
-                    errorMessage.style.display = 'none';
-                    phoneInput.style.borderColor = '';
-                }
-            });
+            //     if (!isValid && phoneInput.value.length > 0) {
+            //         errorMessage.textContent = 'Please enter a valid phone number (7-15 digits, may start with +)';
+            //         errorMessage.style.display = 'block';
+            //         phoneInput.style.borderColor = '#ff4d4d';
+            //     } else {
+            //         errorMessage.style.display = 'none';
+            //         phoneInput.style.borderColor = '';
+            //     }
+            // });
 
             // Validate on form submission
-            const form = document.querySelector('form');
-            form.addEventListener('submit', function (event) {
-                const isValid = phoneRegex.test(phoneInput.value);
+            // const form = document.querySelector('form');
+            // form.addEventListener('submit', function (event) {
+            //     const isValid = phoneRegex.test(phoneInput.value);
 
-                if (!isValid) {
-                    event.preventDefault();
-                    errorMessage.textContent = 'Please enter a valid phone number (7-15 digits, may start with +)';
-                    errorMessage.style.display = 'block';
-                    phoneInput.style.borderColor = '#ff4d4d';
-                    phoneInput.focus();
-                }
-            });
-        });
+            //     if (!isValid) {
+            //         event.preventDefault();
+            //         errorMessage.textContent = 'Please enter a valid phone number (7-15 digits, may start with +)';
+            //         errorMessage.style.display = 'block';
+            //         phoneInput.style.borderColor = '#ff4d4d';
+            //         phoneInput.focus();
+            //     }
+            // });
+        // });
     </script>
     <footer>
         <span>@ Developed By Lokesh Chaudhary</span>
