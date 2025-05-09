@@ -1,55 +1,5 @@
 </div>
 
-<!-- Right Sidebar -->
-<div class="aside-section">
-    <div class="profile-section">
-        <div class="username-section">
-            <div>Hello, <%= user.firstName %>
-            </div>
-        </div>
-        <a href="/profile" style="text-decoration: none; color: inherit;">
-            <div class="userimage">
-                <img src="<%= user.profileImage || '/img/avatar.svg' %>" alt="User Avatar">
-            </div>
-        </a>
-    </div>
-    <div class="profile-task-info-section">
-        <div class="profile-total-tasks-info">
-            <div class="total-tasks-info-heading">
-                <span><i class="fas fa-tasks"></i> Total Tasks</span>
-            </div>
-            <div class="total-tasks-info-number">
-                <span id="total-tasks-count">
-                    <%= typeof totalTasks !=='undefined' ? totalTasks : 0 %>
-                </span>
-            </div>
-        </div>
-        <div class="profile-completed-tasks-info">
-            <div class="completed-tasks-info-heading">
-                <span><i class="fas fa-check-circle"></i> Completed</span>
-            </div>
-            <div class="completed-tasks-info-number">
-                <span id="completed-tasks-count">
-                    <%= typeof completedTasks !=='undefined' ? completedTasks : 0 %>
-                </span>
-            </div>
-        </div>
-
-        <div class="profile-completed-tasks-info">
-            <div class="completed-tasks-info-heading">
-                <span><i class="fas fa-clock"></i> Pending</span>
-            </div>
-            <div class="completed-tasks-info-number">
-                <span id="completed-tasks-count">
-                    <%= typeof pendingTasks !=='undefined' ? pendingTasks : 0 %>
-                </span>
-            </div>
-        </div>
-    </div>
-
-</div>
-</div>
-
 <!-- Footer -->
 <footer>
     <span>@ Developed By Lokesh Chaudhary</span>
@@ -70,7 +20,7 @@
                             message.style.display = 'none';
                         }, 500);
                     });
-                }, 5000);
+                }, 2000);
             </script>
             </body>
 

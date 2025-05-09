@@ -22,7 +22,12 @@ body {
   letter-spacing: var(--letter-spacing);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--primary-font);
   font-weight: var(--font-weight-semibold);
 }
@@ -35,15 +40,24 @@ h2 {
   font-size: var(--heading-size-medium);
 }
 
-h3, h4, h5 {
+h3,
+h4,
+h5 {
   font-size: var(--heading-size-small);
 }
 
-p, span, div, button, input, textarea, select {
+p,
+span,
+div,
+button,
+input,
+textarea,
+select {
   font-family: var(--primary-font);
 }
 
-button, input[type="submit"] {
+button,
+input[type="submit"] {
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing);
 }
@@ -78,4 +92,22 @@ button, input[type="submit"] {
 
 .font-bold {
   font-weight: var(--font-weight-bold);
+}
+
+.scrollable {
+  overflow: auto;
+  /* or scroll */
+  -ms-overflow-style: none;
+  /* Hide scrollbar in IE and Edge */
+  scrollbar-width: none;
+  /* Hide scrollbar in Firefox */
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar in Chrome, Safari, and Opera */
+}
+
+.form-control{
+  width: inherit!important;
 }

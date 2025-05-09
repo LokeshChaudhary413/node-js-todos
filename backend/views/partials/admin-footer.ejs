@@ -1,69 +1,7 @@
         
         
         
-        <!-- Right Sidebar -->
-        <div class="aside-section">
-            <div class="profile-section">
-                <div class="username-section">
-                    <div>Hello, <%= user.firstName %></div>
-                </div>
-                <a href="/profile" style="text-decoration: none; color: inherit;">
-                    <div class="userimage">
-                        <img src="<%= user.profileImage || '/img/avatar.svg' %>" alt="User Avatar">
-                    </div>
-                </a>
-            </div>
-            <div class="profile-task-info-section">
-                <div class="profile-total-tasks-info">
-                    <div class="total-tasks-info-heading">
-                        <h5><i class="fas fa-tasks"></i> Total Tasks</h5>
-                    </div>
-                    <div class="total-tasks-info-number">
-                        <h5 id="total-tasks-count"><%= typeof totalTasks !== 'undefined' ? totalTasks : 0 %></h5>
-                    </div>
-                </div>
-                <div class="profile-completed-tasks-info">
-                    <div class="completed-tasks-info-heading">
-                        <h5><i class="fas fa-check-circle"></i> Completed</h5>
-                    </div>
-                    <div class="completed-tasks-info-number">
-                        <h5 id="completed-tasks-count"><%= typeof completedTasks !== 'undefined' ? completedTasks : 0 %></h5>
-                    </div>
-                </div>
-            </div>
-            <div class="category-info-section">
-                <div class="category-info-heading">
-                    <h5><i class="fas fa-chart-pie"></i> Categories</h5>
-                </div>
-                <div class="category-info-list" id="category-summary">
-                    <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
-                        <% categories.forEach(function(category) { %>
-                            <div class="category-item">
-                                <div class="category-name">
-                                    <span class="category-icon" style="color: <%= category.color %>;">
-                                        <i class="fas fa-circle"></i>
-                                    </span>
-                                    <%= category.name %>
-                                </div>
-                                <div class="category-count">
-                                    <% 
-                                    let count = 0;
-                                    if (typeof categoryCounts !== 'undefined' && categoryCounts[category.id]) {
-                                        count = categoryCounts[category.id];
-                                    }
-                                    %>
-                                    <%= count %>
-                                </div>
-                            </div>
-                        <% }); %>
-                    <% } else { %>
-                        <div class="loading-categories">
-                            <i class="fas fa-spinner fa-spin"></i> Loading categories...
-                        </div>
-                    <% } %>
-                </div>
-            </div>
-        </div>
+       
     </div>
 
     <!-- Footer -->
