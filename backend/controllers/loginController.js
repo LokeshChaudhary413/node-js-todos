@@ -25,7 +25,7 @@ const loginSubmit = async function (req, res) {
   try {
     // Find user by email
     const user = await User.findOne({ email });
-    //   console.log("User found:", user);
+    // console.log("User found:", user, email, password);
 
     if (!user) {
       return res.render('login', {

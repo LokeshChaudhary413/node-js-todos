@@ -58,6 +58,7 @@ const listUsers = async (req, res) => {
         const userTasks = await Task.find({ user: req.user._id });
         const totalTasks = userTasks.length;
         const userCompletedTasks = userTasks.filter(task => task.completed).length;
+        const userPendingTasks = userTasks.filter(task => task.pending).length;
 
         // Calculate category counts for the sidebar
         const categoryCounts = {};
@@ -74,6 +75,7 @@ const listUsers = async (req, res) => {
             categories,
             totalTasks,
             completedTasks: userCompletedTasks,
+            pendingTasks: userPendingTasks,
             categoryCounts,
             messages: {
                 success: req.flash('success'),

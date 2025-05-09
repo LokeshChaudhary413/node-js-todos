@@ -12,20 +12,12 @@
     z-index: 1000;
 }
 
-/* Navigation bar */
-.nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 90%;
-    max-width: 1200px;
-    padding: 12px 20px;
-}
-
 /* Logo container */
 .logo {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 15vw;
 }
 
 /* Logo image */

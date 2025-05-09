@@ -442,7 +442,11 @@ const getAllUsersTasks = async (req, res) => {
         res.render('admin/tasks', {
             title: 'All Users Tasks',
             tasks,
-            user: req.session.user
+            user: req.session.user,
+            messages: {
+                success: req.flash('success'),
+                error: req.flash('error')
+            }
         });
     } catch (error) {
         console.error('Error in getAllUsersTasks:', error);

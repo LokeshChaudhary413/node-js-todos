@@ -4,24 +4,67 @@ const bcrypt = require('bcryptjs');
 // Display user profile form
 const profileForm = async (req, res) => {
     try {
+
+        console.log("Test Profile page called");
         // Get the current user
         const user = await User.findById(req.user._id);
+        const counts = 0
+        const categories = []
+        const allTasks = [];
+        const totalTasks = 0;
+        const completedTasks = 0;
+        const pendingTasks = 0;
+        const categoryCounts = 0;
+
+        // Define additional scripts
+        const additionalScripts = `
+        <script>
+            // Additional scripts for categories
+        </script>
+        `;
+
 
         if (!user) {
             req.flash('error', 'User not found');
             return res.redirect('/dashboard');
         }
 
-        res.render('profile', {
+
+        const profileContent = await new Promise((resolve, reject) => {
+            res.render('profile', {
+                title: 'My Profile',
+                categories,
+                counts,
+                user: req.user,
+                totalTasks,
+                completedTasks,
+                categoryCounts
+            }, (err, html) => {
+                if (err) reject(err);
+                else resolve(html);
+            });
+        });
+
+        // Then render the dashboard layout with the content
+        res.render('partials/dashboard-layout', {
             title: 'My Profile',
             user: user,
             activePage: 'profile',
             additionalStyles: '',
+            categories,
+            counts,
+            totalTasks,
+            completedTasks,
+            pendingTasks,
+            categoryCounts,
+            additionalScripts,
+            mainContent: profileContent,
             messages: {
                 success: req.flash('success'),
                 error: req.flash('error')
             }
         });
+
     } catch (error) {
         console.error('Profile form error:', error);
         req.flash('error', 'Error loading profile');

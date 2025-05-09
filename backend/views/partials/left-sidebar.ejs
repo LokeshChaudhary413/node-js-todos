@@ -1,0 +1,23 @@
+<!-- Left Sidebar -->
+<div class="leftside-nav">
+    <div class="nav-heading">
+        <h5>Operations</h5>
+    </div>
+    <ul type="none" class="leftside-nav-ul">
+        <a href="/tasks/pending" class="<%= activePage === 'pending-tasks' ? 'active' : '' %>">
+            <li><i class="fas fa-clock"></i> Pending Tasks</li>
+        </a>
+        <a href="/tasks/completed" class="<%= activePage === 'completed-tasks' ? 'active' : '' %>">
+            <li><i class="fas fa-check-circle"></i> Completed Tasks</li>
+        </a>
+        <a href="/tasks" class="<%= activePage === 'all-tasks' ? 'active' : '' %>">
+            <li><i class="fas fa-list"></i> All Tasks</li>
+        </a>
+        <!-- <a href="/tasks/forms" class="<%= activePage === 'task-forms' ? 'active' : '' %>">
+            <li><i class="fas fa-plus-square"></i> Quick Add Forms</li>
+        </a> -->
+        <a href="/categories" class="<%= activePage === 'categories' ? 'active' : '' %>">
+            <li><i class="fas fa-tag"></i> Categories</li>
+        </a>
+    </ul>
+</div>
