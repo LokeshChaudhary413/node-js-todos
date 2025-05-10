@@ -8,6 +8,5 @@ chmod 777 backend/public/uploads
 docker-compose down
 
 # Rebuild, and run the containers
-# docker-compose up --build -d
+docker-compose up --build -d
 
-docker-compose up  -d
