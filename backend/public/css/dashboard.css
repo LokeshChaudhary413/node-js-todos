@@ -146,10 +146,9 @@ body {
 }
 
 .task-info {
-    width: 38vw;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     gap: 1rem;
     margin: 20px;
 }
@@ -422,7 +421,6 @@ li:hover {
 
 .bottom-section {
     padding: 20px;
-    height: 55vh;
     overflow-y: auto;
 }
 
