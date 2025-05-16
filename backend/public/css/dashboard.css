@@ -213,7 +213,6 @@ body {
 }
 
 .category-section {
-    width: 30vw;
     height: 3vh;
     padding: 20px 40px;
     background-color: #1d2021;
@@ -239,8 +238,9 @@ body {
 
 .category-ul {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    padding-left: 0;
+    /* justify-content: center;
+    align-items: center; */
     flex-direction: column;
 }
 
