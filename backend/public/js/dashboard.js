@@ -20,7 +20,7 @@ if (hour >= 4 && hour < 12 && ampm === 'am') {
 
 // restricting the user from selecting a date before today
 var currentDate = new Date().toISOString().split("T")[0];
-var dateInput = document.querySelector(".input-date");
+var dateInput = document.querySelector("#task-date");
 
 // Set the min attribute to the current date
 dateInput.setAttribute("min", currentDate);

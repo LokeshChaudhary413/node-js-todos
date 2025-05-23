@@ -1,195 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <link rel="stylesheet" href="/css/modal.css">
-    <link rel="stylesheet" href="/css/task-management.css">
-    <link rel="stylesheet" href="/css/nav-fix.css">
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/7692/7692809.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <style>
-        .flash-messages {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-
-        .flash-message {
-            padding: 10px 20px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            opacity: 0.9;
-        }
-
-        .flash-message.success {
-            background-color: #4CAF50;
-        }
-
-        .flash-message.error {
-            background-color: #f44336;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="flash-messages">
-        <% if (messages.success && messages.success.length > 0) { %>
-            <div class="flash-message success">
-                <%= messages.success %>
-            </div>
-        <% } %>
-        <% if (messages.error && messages.error.length > 0) { %>
-            <div class="flash-message error">
-                <%= messages.error %>
-            </div>
-        <% } %>
+    <div class="upper-section">
+        <div class="greeting-user-section">
+        <h6 class="greeting-user">--------</h6>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="nav-container">
-            <div class="nav">
-                <div class="logo">
-                    <a href="<%= baseUrl %>/dashboard">
-                        <img src="https://cdn-icons-png.flaticon.com/512/7692/7692809.png" alt="Todo Logo">
-                    </a>
-                </div>
-                <div class="nav-links">
-                    <ul>
-                        <li><a href="<%= baseUrl %>/dashboard">Dashboard</a></li>
-                        <li><a href="<%= baseUrl %>/profile">Profile</a></li>
-                        <% if (user.role === 'admin' || user.role === 'superadmin') { %>
-                            <li><a href="<%= baseUrl %>/admin">Admin</a></li>
-                        <% } %>
-                        <li><a href="<%= baseUrl %>/logout">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Flash Messages Container -->
+    <div class="flash-messages"></div>
+
+    <div class="task-management-header">
+        <h1> Task Management</h1>
+        <div class="task-actions">
+            <button id="new-task-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Task</button>
         </div>
+    </div>
 
-        <div class="main-container">
-            <div class="main">
-                <div class="sidebar">
-                    <div class="sidebar-links">
-                        <ul>
-                            <a href="<%= baseUrl %>/dashboard">
-                                <li><i class="fas fa-home"></i> Dashboard</li>
-                            </a>
-                            <a href="<%= baseUrl %>/tasks/manage" class="active">
-                                <li><i class="fas fa-tasks"></i> Manage Tasks</li>
-                            </a>
-                            <a href="<%= baseUrl %>/tasks/pending">
-                                <li><i class="fas fa-clock"></i> Pending Tasks</li>
-                            </a>
-                            <a href="<%= baseUrl %>/tasks/completed">
-                                <li><i class="fas fa-check-circle"></i> Completed Tasks</li>
-                            </a>
-                            <a href="<%= baseUrl %>/tasks/forms">
-                                <li><i class="fas fa-plus-square"></i> Quick Add Forms</li>
-                            </a>
-                            <a href="<%= baseUrl %>/categories">
-                                <li><i class="fas fa-tag"></i> Categories</li>
-                            </a>
-                        </ul>
-                    </div>
-                </div>
-                <div class="main-section">
-                    <div class="task-management-header">
-                        <h1><i class="fas fa-tasks"></i> Task Management</h1>
-                        <div class="task-actions">
-                            <button id="new-task-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Task</button>
-                        </div>
-                    </div>
-
-                    <div class="task-filters">
-                        <div class="filter-group">
-                            <label for="category-filter"><i class="fas fa-filter"></i> Filter by Category:</label>
-                            <select id="category-filter">
-                                <option value="all">All Categories</option>
-                                <!-- Categories will be loaded dynamically -->
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="status-filter"><i class="fas fa-tasks"></i> Filter by Status:</label>
-                            <select id="status-filter">
-                                <option value="all">All Statuses</option>
-                                <option value="pending">Pending</option>
-                                <option value="completed">Completed</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <button id="apply-filters" class="btn btn-secondary"><i class="fas fa-search"></i> Apply Filters</button>
-                            <button id="reset-filters" class="btn btn-outline"><i class="fas fa-undo"></i> Reset</button>
-                        </div>
-                    </div>
-
-                    <div class="task-list-container">
-                        <table class="task-table">
-                            <thead>
-                                <tr>
-                                    <th><i class="fas fa-file-alt"></i> Title</th>
-                                    <th><i class="fas fa-tag"></i> Category</th>
-                                    <th><i class="fas fa-calendar-alt"></i> Due Date</th>
-                                    <th><i class="fas fa-info-circle"></i> Status</th>
-                                    <th><i class="fas fa-cogs"></i> Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="task-list">
-                                <!-- Tasks will be loaded dynamically -->
-                                <tr class="loading-row">
-                                    <td colspan="5"><i class="fas fa-spinner fa-spin"></i> Loading tasks...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="aside-section">
-                    <div class="profile-section">
-                        <div class="username-section">
-                            <div>Hello, <%= user.firstName %></div>
-                        </div>
-                        <a href="/profile" style="text-decoration: none; color: inherit;">
-                            <div class="userimage">
-                                <img src="<%= user.profileImage || '/img/avatar.svg' %>" alt="User Avatar">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="profile-task-info-section">
-                        <div class="profile-total-tasks-info">
-                            <div class="total-tasks-info-heading">
-                                <h5><i class="fas fa-tasks"></i> Total Tasks</h5>
-                            </div>
-                            <div class="total-tasks-info-number">
-                                <h5 id="total-tasks-count">0</h5>
-                            </div>
-                        </div>
-                        <div class="profile-completed-tasks-info">
-                            <div class="completed-tasks-info-heading">
-                                <h5><i class="fas fa-check-circle"></i> Completed</h5>
-                            </div>
-                            <div class="completed-tasks-info-number">
-                                <h5 id="completed-tasks-count">0</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="category-info-section">
-                        <div class="category-info-heading">
-                            <h5><i class="fas fa-chart-pie"></i> Categories</h5>
-                        </div>
-                        <div class="category-info-list" id="category-summary">
-                            <!-- Category summary will be loaded dynamically -->
-                            <div class="loading-categories"><i class="fas fa-spinner fa-spin"></i> Loading categories...</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="task-filters">
+        <div class="filter-group">
+            <label for="category-filter"><i class="fas fa-filter"></i> Filter by Category:</label>
+            <select id="category-filter">
+                <option value="all">All Categories</option>
+                <!-- Categories will be loaded dynamically -->
+            </select>
         </div>
+        <div class="filter-group">
+            <label for="status-filter"><i class="fas fa-tasks"></i> Filter by Status:</label>
+            <select id="status-filter">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <button id="apply-filters" class="btn btn-secondary"><i class="fas fa-search"></i> Apply Filters</button>
+            <button id="reset-filters" class="btn btn-outline"><i class="fas fa-undo"></i> Reset</button>
+        </div>
+    </div>
+
+    <!-- Category summary container removed as requested -->
+
+    <div class="task-list-container">
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th><i class="fas fa-file-alt"></i> Title</th>
+                    <th><i class="fas fa-tag"></i> Category</th>
+                    <th><i class="fas fa-calendar-alt"></i> Due Date</th>
+                    <th><i class="fas fa-info-circle"></i> Status</th>
+                    <th><i class="fas fa-cogs"></i> Actions</th>
+                </tr>
+            </thead>
+            <tbody id="task-list">
+                <!-- Tasks will be loaded dynamically -->
+                <tr class="loading-row">
+                    <td colspan="5"><i class="fas fa-spinner fa-spin"></i> Loading tasks...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <!-- Task Form Modal -->
@@ -200,7 +66,11 @@
                 <span class="close-modal">&times;</span>
             </div>
             <form id="task-form">
+                <!-- Add hidden input fields for category data -->
                 <input type="hidden" id="task-id" name="taskId">
+                <input type="hidden" id="category-id" name="category">
+                <input type="hidden" id="category-choosed" name="categoryChoosedValue">
+
                 <div class="input-field">
                     <label for="task-title"><i class="fas fa-heading"></i> Task Title</label>
                     <input type="text" id="task-title" name="title" placeholder="Enter task title" required>
@@ -211,12 +81,14 @@
                     <textarea id="task-description" name="description" placeholder="Enter task description"></textarea>
                 </div>
 
+                <!-- Category dropdown removed as requested -->
+
                 <div class="input-field">
-                    <label for="task-category"><i class="fas fa-tag"></i> Category</label>
-                    <select id="task-category" name="categoryChoosed" required>
-                        <option value="">Select a category</option>
+                    <label><i class="fas fa-palette"></i> Category Icons</label>
+                    <div id="categories-container" class="categories-container">
                         <!-- Categories will be loaded dynamically -->
-                    </select>
+                        <div class="loading-categories">Loading categories...</div>
+                    </div>
                 </div>
 
                 <div class="input-field">
@@ -257,12 +129,92 @@
     <!-- Notification Template -->
     <div id="notification-template" class="notification" style="display: none;"></div>
 
-    <footer>
-        <span>@ Developed By Lokesh Chaudhary</span>
-    </footer>
-
-    <script src="/js/dashboard.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+
+    <style>
+        /* Category Summary Styles removed as requested */
+
+        .category-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .category {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category.selected, .category.active-category {
+            border-color: #4CAF50;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .category img {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 5px;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .flash-message {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 250px;
+        }
+
+        .flash-success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .flash-error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
 
     <script>
         // Task management functionality
@@ -289,7 +241,6 @@
             // Initialize
             loadTasks();
             loadCategories();
-            loadCategorySummary();
 
             // Event listeners
             newTaskBtn.addEventListener('click', () => openTaskForm());
@@ -316,9 +267,10 @@
             function openTaskForm(taskId = null) {
                 // Reset form
                 taskForm.reset();
-                document.getElementById('task-id').value = '';
                 document.getElementById('category-choosed').value = '';
                 document.getElementById('category-id').value = '';
+
+                // Reset category selections in the categories container
                 document.querySelectorAll('.category').forEach(cat => {
                     cat.classList.remove('selected');
                     cat.classList.remove('active-category');
@@ -327,6 +279,7 @@
                 // Set default date to today
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('task-date').value = today;
+                document.getElementById('task-time').value = '';
 
                 // If editing existing task
                 if (taskId) {
@@ -342,7 +295,9 @@
                         document.getElementById('category-choosed').value = task.categoryChoosed;
                         document.getElementById('category-id').value = task.category || '';
 
-                        // Select the category
+                        // Category dropdown selection removed
+
+                        // Select the category in the categories container
                         const categoryEl = document.querySelector(`.category[data-id="${task.categoryChoosed}"]`);
                         if (categoryEl) {
                             categoryEl.classList.add('selected');
@@ -380,7 +335,7 @@
                     if (statusFilter !== 'all') {
                         url = `/api/tasks/${statusFilter}`;
                     }
-
+                    console.log("Url: " +url)
                     const response = await fetch(url);
                     if (!response.ok) {
                         throw new Error('Failed to fetch tasks');
@@ -388,15 +343,12 @@
 
                     tasks = await response.json();
 
+                    console.log("Tasks: " , tasks)
+
                     // Filter by category if needed
                     if (categoryFilter !== 'all') {
                         tasks = tasks.filter(task => task.categoryChoosed === categoryFilter);
                     }
-
-                    // Update counts
-                    document.getElementById('total-tasks-count').textContent = tasks.length;
-                    document.getElementById('completed-tasks-count').textContent =
-                        tasks.filter(task => task.completed).length;
 
                     // Render tasks
                     renderTasks(tasks);
@@ -469,6 +421,8 @@
                     const data = await response.json();
                     categories = data.categories;
 
+                    console.log("Categories: " , categories)
+
                     // Populate category filter
                     const categoryFilter = document.getElementById('category-filter');
                     categoryFilter.innerHTML = '<option value="all">All Categories</option>';
@@ -489,7 +443,7 @@
                         categories.forEach(category => {
                             const categoryDiv = document.createElement('div');
                             categoryDiv.className = 'category';
-                            categoryDiv.id = category.name.toLowerCase();
+                            categoryDiv.id = 'personal';
                             categoryDiv.dataset.id = category.name.toLowerCase();
                             categoryDiv.dataset.categoryId = category._id;
 
@@ -532,57 +486,7 @@
                 }
             }
 
-            async function loadCategorySummary() {
-                try {
-                    const response = await fetch('/api/tasks');
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch tasks');
-                    }
-
-                    const tasks = await response.json();
-                    const categorySummary = document.getElementById('category-summary');
-
-                    // Count tasks by category
-                    const categoryCounts = {};
-                    tasks.forEach(task => {
-                        const category = task.categoryChoosed;
-                        if (!categoryCounts[category]) {
-                            categoryCounts[category] = { total: 0, completed: 0 };
-                        }
-                        categoryCounts[category].total++;
-                        if (task.completed) {
-                            categoryCounts[category].completed++;
-                        }
-                    });
-
-                    // Render category summary
-                    if (Object.keys(categoryCounts).length > 0) {
-                        categorySummary.innerHTML = '';
-
-                        Object.entries(categoryCounts).forEach(([category, counts]) => {
-                            const categoryItem = document.createElement('div');
-                            categoryItem.className = 'category-item';
-
-                            categoryItem.innerHTML = `
-                                <div class="category-name">
-                                    <span class="category-badge ${category}">${category}</span>
-                                </div>
-                                <div class="category-count">
-                                    <span>${counts.completed}/${counts.total}</span>
-                                </div>
-                            `;
-
-                            categorySummary.appendChild(categoryItem);
-                        });
-                    } else {
-                        categorySummary.innerHTML = '<div class="no-categories">No categories found</div>';
-                    }
-                } catch (error) {
-                    console.error('Error loading category summary:', error);
-                    document.getElementById('category-summary').innerHTML =
-                        '<div class="error-loading">Error loading categories</div>';
-                }
-            }
+            // loadCategorySummary function removed as requested
 
             async function saveTask(e) {
                 e.preventDefault();
@@ -633,7 +537,6 @@
                     // Close form and reload tasks
                     closeTaskForm();
                     loadTasks(categoryFilter.value, statusFilter.value);
-                    loadCategorySummary();
 
                     // Show success message
                     showNotification(taskId ? 'Task updated successfully' : 'Task created successfully', 'success');
@@ -655,7 +558,6 @@
 
                     // Reload tasks
                     loadTasks(categoryFilter.value, statusFilter.value);
-                    loadCategorySummary();
 
                     // Show success message
                     showNotification('Task status updated', 'success');
@@ -680,7 +582,6 @@
                     // Close modal and reload tasks
                     closeDeleteConfirm();
                     loadTasks(categoryFilter.value, statusFilter.value);
-                    loadCategorySummary();
 
                     // Show success message
                     showNotification('Task deleted successfully', 'success');
@@ -704,19 +605,63 @@
 
             function showNotification(message, type) {
                 const notification = document.createElement('div');
-                notification.className = `flash-message ${type}`;
-                notification.textContent = message;
+                notification.className = `flash-message flash-${type}`;
+                notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
 
                 const flashMessages = document.querySelector('.flash-messages');
-                flashMessages.appendChild(notification);
+                if (flashMessages) {
+                    flashMessages.appendChild(notification);
 
-                // Remove notification after 3 seconds
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
+                    // Add animation
+                    notification.style.animation = 'slideIn 0.3s ease, fadeOut 0.3s ease 2.7s';
+
+                    // Remove notification after 3 seconds
+                    setTimeout(() => {
+                        notification.style.opacity = '0';
+                        notification.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => {
+                            notification.remove();
+                        }, 500);
+                    }, 3000);
+                } else {
+                    console.error('Flash messages container not found');
+                }
             }
         });
     </script>
-</body>
 
-</html>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('task-date').value = today;
+
+            // Category selection is now handled by the categories container
+            const categoryIdInput = document.getElementById('category-id');
+            const categoryChoosedInput = document.getElementById('category-choosed');
+
+            // Set up form submission
+            document.getElementById('task-form').addEventListener('submit', function(e) {
+                // Check if a category is selected
+                if (!categoryChoosedInput.value) {
+                    e.preventDefault();
+                    alert('Please select a category');
+                }
+            });
+
+            // Form reset handlers
+            document.getElementById('task-form').addEventListener('reset', function() {
+                setTimeout(() => {
+                    document.getElementById('task-date').value = today;
+                    categoryIdInput.value = '';
+                    categoryChoosedInput.value = '';
+
+                    // Reset category selections in the categories container
+                    document.querySelectorAll('.category').forEach(cat => {
+                        cat.classList.remove('selected');
+                        cat.classList.remove('active-category');
+                    });
+                }, 0);
+            });
+        });
+    </script>

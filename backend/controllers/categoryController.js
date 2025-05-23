@@ -288,6 +288,9 @@ const deleteCategory = async (req, res) => {
 const getCategoriesApi = async (req, res) => {
     try {
         const categories = await Category.find({ users: req.user._id }).sort({ isDefault: -1, name: 1 });
+        console.log("Category controller:")
+        console.log(categories)
+
         res.json({ categories });
     } catch (error) {
         console.error('Error fetching categories API:', error);
