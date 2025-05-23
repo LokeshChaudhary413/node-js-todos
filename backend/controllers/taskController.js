@@ -137,17 +137,89 @@ const manageTasksPage = async (req, res) => {
         const user = req.session.user;
         const baseUrl = req.protocol + '://' + req.get('host');
 
-        res.render('task-management', {
+        const tasks = await Task.find({
+            user: req.session.user._id,
+            completed: false
+        }).sort({ date: 1 }); // Sort by due date
+
+        // Get all categories for the user
+        const categories = await Category.find({ user: req.session.user._id });
+        console.log(`Category From task controller: ${req.session.user._id}`)
+
+        // Get task counts for sidebar
+        const allTasks = await Task.find({ user: req.session.user._id });
+        const totalTasks = allTasks.length;
+        const completedTasks = allTasks.filter(task => task.completed).length;
+        const pendingTasks = totalTasks - completedTasks;
+
+        // Count tasks by category for the sidebar
+        const categoryCounts = {};
+        categories.forEach(category => {
+            categoryCounts[category.id] = allTasks.filter(task =>
+                task.category && task.category.toString() === category.id.toString()
+            ).length;
+        });
+
+        // Count tasks by category
+        const workTasks = tasks.filter(task => task.categoryChoosed === 'work').length;
+        const personalTasks = tasks.filter(task => task.categoryChoosed === 'personal').length;
+        const shoppingTasks = tasks.filter(task => task.categoryChoosed === 'shopping').length;
+        const otherTasks = tasks.filter(task => task.categoryChoosed === 'others').length;
+
+        // Calculate pending tasks
+        const total = allTasks.length;
+        const completed = completedTasks;
+        const pending = total - completed;
+        const name = req.session.user ? req.session.user.firstName + " " + req.session.user.lastName : "";
+
+        // Define additional scripts
+        const additionalScripts = `
+        <script>
+            // Additional scripts for pending tasks
+        </script>
+        `;
+
+        // Render the dashboard content first
+        const dashboardContent = await new Promise((resolve, reject) => {
+            res.render('task-management', {
+                title: "Manage Tasks",
+                name: name,
+                tasks: tasks,
+                user: user,
+                categories: categories,
+                workTasks,
+                personalTasks,
+                shoppingTasks,
+                otherTasks,
+                total,
+                completed,
+                pending,
+                activeTab: 'all'
+            }, (err, html) => {
+                if (err) reject(err);
+                else resolve(html);
+            });
+        });
+
+        // Then render the dashboard layout with the content
+        res.render('partials/dashboard-layout', {
             title: 'Manage Tasks',
-            user,
-            baseUrl,
-            activePage: 'manage-tasks',
+            user: req.session.user,
+            activePage: 'tasks/manage',
             additionalStyles: '',
+            categories,
+            totalTasks,
+            completedTasks,
+            pendingTasks,
+            categoryCounts,
+            additionalScripts,
+            mainContent: dashboardContent,
             messages: {
                 success: req.flash('success'),
                 error: req.flash('error')
             }
         });
+
     } catch (error) {
         console.error('Error loading task management page:', error);
         res.render('error', { message: 'Error loading task management page' });

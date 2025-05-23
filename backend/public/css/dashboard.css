@@ -1,3 +1,22 @@
+
+/* Task Management Styles */
+:root {
+    --primary-color: #2396b3;
+    --primary-hover: #1a7a8f;
+    --secondary-color: #4CAF50;
+    --secondary-hover: #45a049;
+    --danger-color: #f44336;
+    --danger-hover: #d32f2f;
+    --warning-color: #FFC107;
+    --warning-hover: #e6ac00;
+    --dark-bg: #1d2021;
+    --darker-bg: #181a1b;
+    --light-text: #cfd1d0;
+    --border-color: #333;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s ease;
+}
+
 /* Font imports and base styles are now in common.css */
 
 body {
@@ -112,7 +131,7 @@ body {
 
 .main-content {
     padding: 20px;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 
 /* .rightside-nav {
@@ -148,7 +167,7 @@ body {
 .task-info {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     gap: 1rem;
     margin: 20px;
 }
@@ -270,10 +289,10 @@ body {
 li {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-radius: 10px;
     transition: all 0.5s ease-in-out;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 li:hover {
@@ -568,8 +587,6 @@ li:hover {
 }
 
 #personal {
-    width: 4vw;
-    height: 6vh;
     background-color: #20212b;
     padding: 20px;
     margin: 10px;
@@ -577,8 +594,8 @@ li:hover {
     border-radius: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
     box-shadow: 5px 5px 10px rgb(19, 19, 19);
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -843,6 +860,7 @@ footer span {
     display: flex;
     gap: 15px;
     margin-bottom: 20px;
+    justify-content: flex-end;
 }
 
 .filter-btn {
@@ -1056,15 +1074,7 @@ footer span {
 
 /* Mobile Layout (up to 600px) */
 @media screen and (max-width: 600px) {
-    body {
-        overflow-y: auto;
-    }
-
-    .nav-container {
-        position: fixed;
-        width: 100%;
-        z-index: 1000;
-    }
+    
 
     .nav {
         flex-direction: column;
@@ -1086,7 +1096,7 @@ footer span {
 
     .main-container {
         grid-template-columns: 1fr;
-        margin-top: 100px;
+        margin-top: 5px;
         overflow-y: auto;
     }
 
@@ -1178,24 +1188,14 @@ footer span {
         padding: 8px;
         font-size: 0.9rem;
     }
-}
 
-/* Add hamburger menu for mobile */
-.menu-toggle {
-    display: none;
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 1001;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-@media screen and (max-width: 600px) {
-    .menu-toggle {
-        display: block;
+    footer {
+        height: 5vh;
     }
+
 }
+
+@media (max-width: 480px) {
+
+}
+
