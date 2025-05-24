@@ -17,8 +17,6 @@ router.get('/categories', taskController.getTaskCategories);
 // Task management page
 router.get('/manage', restrictGuest, taskController.manageTasksPage);
 
-// Task and Category Forms page
-router.get('/forms', restrictGuest, taskController.taskCategoryFormsPage);
 
 // Task routes - only registered users can create/modify tasks
 router.post('/', restrictGuest, taskController.createTask);

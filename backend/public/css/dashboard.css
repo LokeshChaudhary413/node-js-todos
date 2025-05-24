@@ -217,7 +217,7 @@ body {
     letter-spacing: 2px;
     padding: 10px 20px;
     transition: all 0.5s ease-in-out;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     cursor: pointer;
 }
 
@@ -1014,14 +1014,27 @@ footer span {
     .task-card {
         margin: 0 10px;
     }
+
+    .add-task-button{
+        width: 20vw;
+    }
 }
 
 /* Tablet Layout (601px to 1024px) */
 @media screen and (min-width: 601px) and (max-width: 1024px) {
-    .main-container {
+    /* .main-container {
         grid-template-columns: 250px 1fr;
         margin-top: 6px;
+    } */
+
+    .leftside-nav {
+        width: 30vw;
     }
+
+    .main-section { 
+        width: calc(100vw - 30vw)!important;
+    }
+
 
     .rightside-nav,
     .aside-section {
@@ -1058,8 +1071,9 @@ footer span {
     }
 
     .add-task-button {
-        padding: 8px 15px;
         font-size: 0.9rem;
+        width: 20vw;
+        letter-spacing: 1px;
     }
 
     .category-section {
