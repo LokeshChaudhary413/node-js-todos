@@ -40,14 +40,14 @@
 }
 
 /* Main Content Section */
-.main-section {
+/* .main-section {
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
     overflow-y: auto;
     padding-right: 10px;
-}
+} */
 
 /* Task Management Header */
 .task-management-header {

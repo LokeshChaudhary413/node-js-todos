@@ -29,8 +29,8 @@ router.get('/tasks/pending', async (req, res) => {
             user: req.user._id,
             completed: false
         })
-        .populate('category')
-        .sort({ date: 1, time: 1 });
+            .populate('category')
+            .sort({ date: 1, time: 1 });
 
         res.json(tasks);
     } catch (error) {
@@ -46,8 +46,8 @@ router.get('/tasks/completed', async (req, res) => {
             user: req.user._id,
             completed: true
         })
-        .populate('category')
-        .sort({ date: -1, time: -1 });
+            .populate('category')
+            .sort({ date: -1, time: -1 });
 
         res.json(tasks);
     } catch (error) {

@@ -144,6 +144,24 @@
             text-transform: capitalize;
         }
 
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-badge.completed {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .status-badge.pending {
+            background-color: #FFC107;
+            color: #333;
+        }
+
         .categories-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -213,6 +231,47 @@
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
+        }
+
+        /* Task list styles */
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+
+        .task-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .completed-task td {
+            color: #888;
+            text-decoration: line-through;
+            background-color: rgba(76, 175, 80, 0.05);
+        }
+
+        .completed-task .status-badge {
+            text-decoration: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-icon:hover {
+            background-color: #f0f0f0;
         }
     </style>
 
@@ -286,6 +345,7 @@
                     currentTaskId = taskId;
                     const task = tasks.find(t => t._id === taskId);
                     if (task) {
+                        console.log('Editing task:', task);
                         document.getElementById('task-form-title').textContent = 'Edit Task';
                         document.getElementById('task-id').value = task._id;
                         document.getElementById('task-title').value = task.title;
@@ -295,14 +355,35 @@
                         document.getElementById('category-choosed').value = task.categoryChoosed;
                         document.getElementById('category-id').value = task.category || '';
 
-                        // Category dropdown selection removed
+                        console.log('Task category:', task.categoryChoosed);
+                        console.log('Looking for category element with data-id:', task.categoryChoosed ? task.categoryChoosed.toLowerCase() : '');
 
-                        // Select the category in the categories container
-                        const categoryEl = document.querySelector(`.category[data-id="${task.categoryChoosed}"]`);
-                        if (categoryEl) {
-                            categoryEl.classList.add('selected');
-                            categoryEl.classList.add('active-category');
-                        }
+                        // Wait for categories to be loaded before selecting
+                        setTimeout(() => {
+                            // Select the category in the categories container
+                            const categoryEl = document.querySelector(`.category[data-id="${task.categoryChoosed ? task.categoryChoosed.toLowerCase() : ''}"]`);
+                            console.log('Found category element:', categoryEl);
+
+                            if (categoryEl) {
+                                // Remove selected class from all categories first
+                                document.querySelectorAll('.category').forEach(cat => {
+                                    cat.classList.remove('selected');
+                                    cat.classList.remove('active-category');
+                                });
+
+                                // Add selected class to the correct category
+                                categoryEl.classList.add('selected');
+                                categoryEl.classList.add('active-category');
+                                console.log('Category selected successfully');
+                            } else {
+                                console.log('Category element not found. Available categories:');
+                                document.querySelectorAll('.category').forEach(cat => {
+                                    console.log('- Category data-id:', cat.dataset.id);
+                                });
+                            }
+                        }, 100);
+                    } else {
+                        console.log('Task not found with ID:', taskId);
                     }
                 } else {
                     document.getElementById('task-form-title').textContent = 'Create New Task';
@@ -347,7 +428,7 @@
 
                     // Filter by category if needed
                     if (categoryFilter !== 'all') {
-                        tasks = tasks.filter(task => task.categoryChoosed === categoryFilter);
+                        tasks = tasks.filter(task => task.categoryChoosed && task.categoryChoosed.toLowerCase() === categoryFilter.toLowerCase());
                     }
 
                     // Render tasks
@@ -372,10 +453,15 @@
                     const row = document.createElement('tr');
                     row.className = task.completed ? 'completed-task' : '';
 
+                    // Safely handle potentially missing or undefined values
+                    const categoryClass = task.categoryChoosed ? task.categoryChoosed.toLowerCase() : 'uncategorized';
+                    const categoryDisplay = task.categoryChoosed || 'Uncategorized';
+                    const formattedDate = task.date || 'No date';
+
                     row.innerHTML = `
                         <td>${task.title}</td>
-                        <td><span class="category-badge ${task.categoryChoosed}">${task.categoryChoosed}</span></td>
-                        <td>${task.date}${task.time ? ' ' + task.time : ''}</td>
+                        <td><span class="category-badge ${categoryClass}">${categoryDisplay}</span></td>
+                        <td>${formattedDate}${task.time ? ' ' + task.time : ''}</td>
                         <td>
                             <span class="status-badge ${task.completed ? 'completed' : 'pending'}">
                                 ${task.completed ? 'Completed' : 'Pending'}
@@ -443,7 +529,7 @@
                         categories.forEach(category => {
                             const categoryDiv = document.createElement('div');
                             categoryDiv.className = 'category';
-                            categoryDiv.id = 'personal';
+                            categoryDiv.id = "personal";
                             categoryDiv.dataset.id = category.name.toLowerCase();
                             categoryDiv.dataset.categoryId = category._id;
 
@@ -492,35 +578,73 @@
                 e.preventDefault();
 
                 const taskId = document.getElementById('task-id').value;
-                const title = document.getElementById('task-title').value;
-                const description = document.getElementById('task-description').value;
+                const title = document.getElementById('task-title').value.trim();
+                const description = document.getElementById('task-description').value.trim();
                 const date = document.getElementById('task-date').value;
                 const time = document.getElementById('task-time').value;
                 const categoryChoosed = document.getElementById('category-choosed').value;
                 const category = document.getElementById('category-id').value;
 
-                if (!title || !date || !categoryChoosed) {
-                    alert('Please fill in all required fields');
-                    return;
-                }
-
-                const taskData = {
+                // Debug: Log task data being saved
+                console.log('Saving task with data:', {
+                    taskId,
                     title,
                     description,
                     date,
                     time,
                     categoryChoosed,
                     category
+                });
+
+                // Validate required fields
+                if (!title) {
+                    alert('Please enter a task title');
+                    return;
+                }
+
+                if (!date) {
+                    alert('Please select a due date');
+                    return;
+                }
+
+                // For editing tasks, if no category is selected, try to get it from the existing task
+                if (!categoryChoosed && taskId) {
+                    const existingTask = tasks.find(t => t._id === taskId);
+                    if (existingTask && existingTask.categoryChoosed) {
+                        document.getElementById('category-choosed').value = existingTask.categoryChoosed;
+                        document.getElementById('category-id').value = existingTask.category || '';
+                    } else {
+                        alert('Please select a category');
+                        return;
+                    }
+                } else if (!categoryChoosed) {
+                    alert('Please select a category');
+                    return;
+                }
+
+                // Get the updated values after potential fallback
+                const finalCategoryChoosed = document.getElementById('category-choosed').value;
+                const finalCategory = document.getElementById('category-id').value;
+
+                const taskData = {
+                    title,
+                    description,
+                    date,
+                    time,
+                    categoryChoosed: finalCategoryChoosed,
+                    category: finalCategory
                 };
 
                 try {
-                    let url = '/tasks';
+                    let url = '/api/tasks';
                     let method = 'POST';
 
                     if (taskId) {
-                        url = `/tasks/${taskId}`;
+                        url = `/api/tasks/${taskId}`;
                         method = 'PUT';
                     }
+
+                    console.log('Making request to:', url, 'with method:', method);
 
                     const response = await fetch(url, {
                         method,
@@ -530,9 +654,16 @@
                         body: JSON.stringify(taskData)
                     });
 
+                    console.log('Response status:', response.status);
+
                     if (!response.ok) {
-                        throw new Error('Failed to save task');
+                        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                        console.error('Server error:', errorData);
+                        throw new Error(errorData.error || 'Failed to save task');
                     }
+
+                    const responseData = await response.json();
+                    console.log('Task saved successfully:', responseData);
 
                     // Close form and reload tasks
                     closeTaskForm();
@@ -542,13 +673,13 @@
                     showNotification(taskId ? 'Task updated successfully' : 'Task created successfully', 'success');
                 } catch (error) {
                     console.error('Error saving task:', error);
-                    showNotification('Error saving task', 'error');
+                    showNotification(`Error saving task: ${error.message}`, 'error');
                 }
             }
 
             async function toggleTaskStatus(taskId, currentStatus) {
                 try {
-                    const response = await fetch(`/tasks/${taskId}/toggle-status`, {
+                    const response = await fetch(`/api/tasks/${taskId}/toggle-status`, {
                         method: 'POST'
                     });
 
@@ -571,7 +702,7 @@
                 if (!currentTaskId) return;
 
                 try {
-                    const response = await fetch(`/tasks/${currentTaskId}`, {
+                    const response = await fetch(`/api/tasks/${currentTaskId}`, {
                         method: 'DELETE'
                     });
 
@@ -630,38 +761,4 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set default date to today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('task-date').value = today;
-
-            // Category selection is now handled by the categories container
-            const categoryIdInput = document.getElementById('category-id');
-            const categoryChoosedInput = document.getElementById('category-choosed');
-
-            // Set up form submission
-            document.getElementById('task-form').addEventListener('submit', function(e) {
-                // Check if a category is selected
-                if (!categoryChoosedInput.value) {
-                    e.preventDefault();
-                    alert('Please select a category');
-                }
-            });
-
-            // Form reset handlers
-            document.getElementById('task-form').addEventListener('reset', function() {
-                setTimeout(() => {
-                    document.getElementById('task-date').value = today;
-                    categoryIdInput.value = '';
-                    categoryChoosedInput.value = '';
-
-                    // Reset category selections in the categories container
-                    document.querySelectorAll('.category').forEach(cat => {
-                        cat.classList.remove('selected');
-                        cat.classList.remove('active-category');
-                    });
-                }, 0);
-            });
-        });
-    </script>
+    <!-- Additional form handling script removed to avoid conflicts -->

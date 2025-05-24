@@ -22,33 +22,6 @@ const redirectBasedOnReferer = (req, res) => {
     return res.redirect('/dashboard');
 };
 
-// Task and Category Forms Page
-const taskCategoryFormsPage = async (req, res) => {
-    try {
-        // Get tasks for the current user
-        const tasks = await Task.find({ user: req.user._id }).sort({ createdAt: -1 });
-
-        // Get categories for the current user
-        const categories = await Category.find({ user: req.user._id }).sort({ isDefault: -1, name: 1 });
-
-        res.render('task-category-forms', {
-            title: 'Task & Category Management',
-            user: req.user,
-            tasks,
-            categories,
-            activePage: 'task-forms',
-            additionalStyles: '',
-            messages: {
-                success: req.flash('success'),
-                error: req.flash('error')
-            }
-        });
-    } catch (error) {
-        console.error('Error loading task and category forms page:', error);
-        req.flash('error', 'Error loading page');
-        res.redirect('/dashboard');
-    }
-};
 
 // Get all tasks
 const getAllTasks = async (req, res) => {
@@ -552,12 +525,12 @@ const getTaskById = async (req, res) => {
 const getTaskCategories = async (req, res) => {
     try {
         // Define the standard categories
-        const categories = [
-            { id: 'work', name: 'Work', description: 'Work-related tasks' },
-            { id: 'personal', name: 'Personal', description: 'Personal tasks' },
-            { id: 'shopping', name: 'Shopping', description: 'Shopping lists and tasks' },
-            { id: 'others', name: 'Others', description: 'Other miscellaneous tasks' }
-        ];
+        // const categories = [
+        //     { id: 'work', name: 'Work', description: 'Work-related tasks' },
+        //     { id: 'personal', name: 'Personal', description: 'Personal tasks' },
+        //     { id: 'shopping', name: 'Shopping', description: 'Shopping lists and tasks' },
+        //     { id: 'others', name: 'Others', description: 'Other miscellaneous tasks' }
+        // ];
 
         // Count tasks in each category for the current user
         const counts = {};
@@ -598,6 +571,5 @@ module.exports = {
     deleteTask,
     getTaskById,
     getTaskCategories,
-    manageTasksPage,
-    taskCategoryFormsPage
+    manageTasksPage
 };
