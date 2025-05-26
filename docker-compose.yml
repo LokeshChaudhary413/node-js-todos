@@ -30,7 +30,7 @@ services:
   mongo:
     image: mongo:5.0
     container_name: mongo
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
