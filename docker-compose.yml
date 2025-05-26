@@ -26,12 +26,11 @@ services:
       - mongo
     env_file:
       - ./backend/.env
-    # environment:
-    #   - MONGO_URI=mongodb://mongo:27017/mernapp
+
   mongo:
     image: mongo:5.0
     container_name: mongo
-    restart: always
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
