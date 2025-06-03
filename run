@@ -9,17 +9,3 @@ docker-compose down
 
 # Rebuild, and run the containers
 docker-compose up --build -d
-
-#This is testing file update
-#This is testing file update2
-#This is testing file update3
-#This is testing file update4
-#This is testing file update4
-#This is testing file update5
-#This is testing file update6
-#This is testing file update7
-#This is testing file update8
-#This is testing file update9
-#This is testing file update10
-#This is testing file update11
-#This is testing file update12
