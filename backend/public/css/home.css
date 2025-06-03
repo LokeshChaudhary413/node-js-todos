@@ -356,43 +356,52 @@ body {
     .main-heading {
         font-size: 3rem;
     }
-    
+
     .about {
         max-width: 80%;
     }
-    
+
     .learn-more-container {
         padding: 25px;
     }
 }
 
 @media screen and (max-width: 768px) {
+
+    /* .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 70px 0px;
+    } */
+
     .main-heading {
         font-size: 2.5rem;
         margin-top: 40px;
     }
-    
+
     .about p {
         font-size: 1rem;
     }
-    
+
     .buttons {
         flex-direction: column;
         width: 100%;
         max-width: 300px;
         margin: 20px auto 0;
     }
-    
+
     .get-start,
     .learn-more {
         width: 100%;
     }
-    
+
     .learn-more {
         margin-top: 10px;
     }
-    
+
     .login-signup-section {
+        display: none;
         position: fixed;
         top: 0;
         right: -100%;
@@ -406,11 +415,11 @@ body {
         transition: right 0.4s ease-in-out;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
     }
-    
+
     .login-signup-section.active {
         right: 0;
     }
-    
+
     .nav-login,
     .nav-register {
         width: 100%;
@@ -418,15 +427,18 @@ body {
         margin: 10px 0;
         padding: 12px 0;
     }
-    
+
     .nav-register {
         margin-left: 0;
     }
-    
+
     .menu-toggle {
         display: block;
+        padding: 0;
+        margin: 0;
+        width: none;
     }
-    
+
     .learn-more-container {
         width: 95%;
         padding: 20px;
@@ -434,32 +446,33 @@ body {
 }
 
 @media screen and (max-width: 480px) {
+
     .main-heading {
         font-size: 2.2rem;
         margin-bottom: 15px;
     }
-    
+
     .about {
         max-width: 100%;
         padding: 0 10px;
     }
-    
+
     .about p {
         font-size: 0.95rem;
     }
-    
+
     .buttons {
         max-width: 100%;
     }
-    
+
     .login-signup-section {
         width: 85%;
     }
-    
+
     .learn-more-container {
         padding: 20px 15px;
     }
-    
+
     .learn-more-container p {
         font-size: 0.9rem;
     }
@@ -467,13 +480,14 @@ body {
 
 /* Animation for menu toggle */
 @keyframes fadeIn {
-    from { 
-        opacity: 0; 
-        transform: translateY(-10px); 
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
     }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -486,9 +500,9 @@ html {
 .menu-toggle {
     display: none;
     background-color: white;
-    position: absolute;
+    /* position: absolute;
     right: 5%;
-    top: 20px;
+    top: 20px; */
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
@@ -508,7 +522,7 @@ html {
         z-index: 1002;
         position: relative;
     }
-    
+
     .login-signup-section {
         position: fixed;
         top: 0;
@@ -525,11 +539,11 @@ html {
         z-index: 1001;
         display: flex;
     }
-    
+
     .login-signup-section.active {
         right: 0;
     }
-    
+
     .nav-login,
     .nav-register {
         width: 100%;
@@ -541,39 +555,39 @@ html {
         text-decoration: none;
         transition: all 0.3s ease;
     }
-    
+
     .nav-login:hover {
         color: #2396b3;
     }
-    
+
     .nav-register {
         margin-left: 0;
         border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 8px;
     }
-    
+
     .nav-register:hover {
         background-color: #2396b3;
         border-color: #2396b3;
         color: white;
     }
-    
+
     .main-heading {
         font-size: 2.2rem;
         margin-top: 40px;
     }
-    
+
     .about p {
         font-size: 1rem;
     }
-    
+
     .buttons {
         flex-direction: column;
         width: 100%;
         max-width: 300px;
         margin: 20px auto 0;
     }
-    
+
     .get-start,
     .learn-more {
         width: 100%;
@@ -583,27 +597,31 @@ html {
 
 /* Extra small devices */
 @media screen and (max-width: 480px) {
+
+    .nav{
+        width: auto;
+    }
     .main-heading {
         font-size: 1.8rem;
     }
-    
+
     .about {
         max-width: 100%;
         padding: 0 15px;
     }
-    
+
     .about p {
         font-size: 0.95rem;
     }
-    
+
     .login-signup-section {
         width: 85%;
     }
-    
+
     .learn-more-container {
         padding: 20px 15px;
     }
-    
+
     .learn-more-container p {
         font-size: 0.9rem;
     }
@@ -621,5 +639,6 @@ html {
 .element1,
 .element2,
 .element3 {
-    display: none; /* Hide background elements for now */
+    display: none;
+    /* Hide background elements for now */
 }
